@@ -1,116 +1,96 @@
 import RPi.GPIO as GPIO
 import time
 
-# Definer GPIO pins for linjesensorerne
-left_sensor = 20  # GPIO til venstre TCRT5000 sensor
-right_sensor = 16  # GPIO til højre TCRT5000 sensor
+# Define GPIO pins for TB6612 H-Bridge (front wheels)
+DIR1_Front = 17  # Direction control for front left motor
+PWM1_Front = 12  # Speed control for front left motor
 
-# Definer GPIO pins for forreste hjul (motor 1 og 2, H-bro 1)
-DIR1_Front = 17  # Retningskontrol for venstre forreste motor
-PWM1_Front = 12  # Hastighedskontrol for venstre forreste motor
-DIR2_Front = 27  # Retningskontrol for højre forreste motor
-PWM2_Front = 13  # Hastighedskontrol for højre forreste motor
+DIR2_Front = 27  # Direction control for front right motor
+PWM2_Front = 13  # Speed control for front right motor
 
-# Definer GPIO pins for bageste hjul (motor 3 og 4, H-bro 2)
-DIR1_Back = 5  # Retningskontrol for venstre bageste motor
-PWM1_Back = 18  # Hastighedskontrol for venstre bageste motor
-DIR2_Back = 6  # Retningskontrol for højre bageste motor
-PWM2_Back = 19  # Hastighedskontrol for højre bageste motor
+# Define GPIO pins for TB6612 H-Bridge (back wheels)
+DIR1_Back = 5   # Direction control for back left motor
+PWM1_Back = 18  # Speed control for back left motor
 
-# Opsæt GPIO
+DIR2_Back = 6   # Direction control for back right motor
+PWM2_Back = 19  # Speed control for back right motor
+
+# Set up GPIO pins
 GPIO.setmode(GPIO.BCM)
-
-# Opsæt sensor GPIO som input
-GPIO.setup(left_sensor, GPIO.IN)
-GPIO.setup(right_sensor, GPIO.IN)
-
-# Opsæt GPIO pins for forreste hjul
 GPIO.setup(DIR1_Front, GPIO.OUT)
 GPIO.setup(PWM1_Front, GPIO.OUT)
 GPIO.setup(DIR2_Front, GPIO.OUT)
 GPIO.setup(PWM2_Front, GPIO.OUT)
 
-# Opsæt GPIO pins for bageste hjul
 GPIO.setup(DIR1_Back, GPIO.OUT)
 GPIO.setup(PWM1_Back, GPIO.OUT)
 GPIO.setup(DIR2_Back, GPIO.OUT)
 GPIO.setup(PWM2_Back, GPIO.OUT)
 
-# Opret PWM objekter til hastighedskontrol (100 Hz frekvens)
-pwm_front_left = GPIO.PWM(PWM1_Front, 100)  # Venstre forreste motor
-pwm_front_right = GPIO.PWM(PWM2_Front, 100)  # Højre forreste motor
-pwm_back_left = GPIO.PWM(PWM1_Back, 100)  # Venstre bageste motor
-pwm_back_right = GPIO.PWM(PWM2_Back, 100)  # Højre bageste motor
+# Create PWM objects for speed control
+pwm_front_left = GPIO.PWM(PWM1_Front, 100)  # 100Hz for front left motor
+pwm_front_right = GPIO.PWM(PWM2_Front, 100)  # 100Hz for front right motor
+pwm_back_left = GPIO.PWM(PWM1_Back, 100)  # 100Hz for back left motor
+pwm_back_right = GPIO.PWM(PWM2_Back, 100)  # 100Hz for back right motor
 
-# Start PWM med 0% duty cycle (motorerne er stoppet til at starte med)
-pwm_front_left.start(0)
-pwm_front_right.start(0)
-pwm_back_left.start(0)
-pwm_back_right.start(0)
+# Start PWM with 50% duty cycle initially
+pwm_front_left.start(50)
+pwm_front_right.start(50)
+pwm_back_left.start(50)
+pwm_back_right.start(50)
 
+# Function to move the vehicle forward
 def move_forward():
-    # Sæt alle motorer til fremad
+    # Set direction to forward
     GPIO.output(DIR1_Front, True)
     GPIO.output(DIR2_Front, True)
     GPIO.output(DIR1_Back, True)
     GPIO.output(DIR2_Back, True)
-    
-    # Sæt hastigheden til 50% for både forreste og bageste motorer
-    pwm_front_left.ChangeDutyCycle(50)
-    pwm_front_right.ChangeDutyCycle(50)
-    pwm_back_left.ChangeDutyCycle(50)
-    pwm_back_right.ChangeDutyCycle(50)
 
-def turn_left():
-    # Sæt retning til fremad, men drej til venstre (højre motor hurtigere)
-    GPIO.output(DIR1_Front, True)
-    GPIO.output(DIR2_Front, True)
-    GPIO.output(DIR1_Back, True)
-    GPIO.output(DIR2_Back, True)
-    
-    # Juster hastigheden: venstre motorer langsommere, højre hurtigere
-    pwm_front_left.ChangeDutyCycle(25)  # 25% hastighed venstre forreste
-    pwm_front_right.ChangeDutyCycle(50)  # 50% hastighed højre forreste
-    pwm_back_left.ChangeDutyCycle(25)  # 25% hastighed venstre bageste
-    pwm_back_right.ChangeDutyCycle(50)  # 50% hastighed højre bageste
+# Function to move the vehicle backward
+def move_backward():
+    # Set direction to backward
+    GPIO.output(DIR1_Front, False)
+    GPIO.output(DIR2_Front, False)
+    GPIO.output(DIR1_Back, False)
+    GPIO.output(DIR2_Back, False)
 
-def turn_right():
-    # Sæt retning til fremad, men drej til højre (venstre motor hurtigere)
-    GPIO.output(DIR1_Front, True)
-    GPIO.output(DIR2_Front, True)
-    GPIO.output(DIR1_Back, True)
-    GPIO.output(DIR2_Back, True)
-    
-    # Juster hastigheden: højre motorer langsommere, venstre hurtigere
-    pwm_front_left.ChangeDutyCycle(50)  # 50% hastighed venstre forreste
-    pwm_front_right.ChangeDutyCycle(25)  # 25% hastighed højre forreste
-    pwm_back_left.ChangeDutyCycle(50)  # 50% hastighed venstre bageste
-    pwm_back_right.ChangeDutyCycle(25)  # 25% hastighed højre bageste
-
+# Function to stop all motors
 def stop_motors():
-    # Stop alle motorer ved at sætte PWM duty cycle til 0
     pwm_front_left.ChangeDutyCycle(0)
     pwm_front_right.ChangeDutyCycle(0)
     pwm_back_left.ChangeDutyCycle(0)
     pwm_back_right.ChangeDutyCycle(0)
 
+# Function to set the speed for both left and right motors
+def set_speed(left_speed, right_speed):
+    # Adjust speed for left and right side motors
+    pwm_front_left.ChangeDutyCycle(left_speed)
+    pwm_front_right.ChangeDutyCycle(right_speed)
+    pwm_back_left.ChangeDutyCycle(left_speed)
+    pwm_back_right.ChangeDutyCycle(right_speed)
+
+# Main loop to test forward and backward movement
 try:
     while True:
-        # Læs sensorernes output
-        left_detected = GPIO.input(left_sensor)  # Læs venstre sensor
-        right_detected = GPIO.input(right_sensor)  # Læs højre sensor
+        print("Moving forward")
+        move_forward()
+        set_speed(75, 75)  # Move forward with 75% speed
+        time.sleep(5)      # Move for 5 seconds
         
-        if left_detected == 0 and right_detected == 0:  # Begge sensorer på mørk baggrund
-            move_forward()  # Kør ligeud
-        elif left_detected == 1 and right_detected == 0:  # Venstre sensor på hvid tape
-            turn_right()  # Drej til højre
-        elif left_detected == 0 and right_detected == 1:  # Højre sensor på hvid tape
-            turn_left()  # Drej til venstre
-        else:
-            stop_motors()  # Hvis begge sensorer er på hvid tape, stop
-
-        time.sleep(0.1)  # Lille forsinkelse for stabil aflæsning
+        print("Moving backward")
+        move_backward()
+        set_speed(50, 50)  # Move backward with 50% speed
+        time.sleep(5)      # Move for 5 seconds
+        
+        print("Stopping")
+        stop_motors()      # Stop the motors
+        time.sleep(2)      # Pause for 2 seconds
 
 except KeyboardInterrupt:
-    stop_motors()  # Stop motorerne ved afbrydelse
-    GPIO.cleanup()  # Ryd op i GPIO-indstillingerne
+    # Clean up the GPIO settings and stop PWM on interrupt
+    pwm_front_left.stop()
+    pwm_front_right.stop()
+    pwm_back_left.stop()
+    pwm_back_right.stop()
+    GPIO.cleanup()

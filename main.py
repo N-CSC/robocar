@@ -1,5 +1,5 @@
+import RPi.GPIO as GPIO
 import time
-import os
 
 # Definer GPIO pins for linjesensorerne
 left_sensor = 20  # GPIO til venstre TCRT5000 sensor
@@ -17,60 +17,88 @@ PWM1_Back = 18  # Hastighedskontrol for venstre bageste motor
 DIR2_Back = 6  # Retningskontrol for højre bageste motor
 PWM2_Back = 19  # Hastighedskontrol for højre bageste motor
 
-# Funktion til at eksportere og indstille GPIO
-def setup_gpio(pin, direction):
-    # Eksportér pin og sæt den som output eller input
-    with open("/sys/class/gpio/export", "w") as f:
-        f.write(str(pin))
-    with open(f"/sys/class/gpio/gpio{pin}/direction", "w") as f:
-        f.write(direction)
+# Opsæt GPIO
+GPIO.setmode(GPIO.BCM)
 
-# Funktion til at skrive værdi til en GPIO pin
-def gpio_write(pin, value):
-    with open(f"/sys/class/gpio/gpio{pin}/value", "w") as f:
-        f.write(str(value))
+# Opsæt sensor GPIO som input
+GPIO.setup(left_sensor, GPIO.IN)
+GPIO.setup(right_sensor, GPIO.IN)
 
-# Funktion til at læse værdi fra en GPIO pin
-def gpio_read(pin):
-    with open(f"/sys/class/gpio/gpio{pin}/value", "r") as f:
-        return int(f.read().strip())
+# Opsæt GPIO pins for forreste hjul
+GPIO.setup(DIR1_Front, GPIO.OUT)
+GPIO.setup(PWM1_Front, GPIO.OUT)
+GPIO.setup(DIR2_Front, GPIO.OUT)
+GPIO.setup(PWM2_Front, GPIO.OUT)
 
-# Initialiser GPIO pins
-setup_gpio(left_sensor, "in")  # Venstre sensor som input
-setup_gpio(right_sensor, "in")  # Højre sensor som input
+# Opsæt GPIO pins for bageste hjul
+GPIO.setup(DIR1_Back, GPIO.OUT)
+GPIO.setup(PWM1_Back, GPIO.OUT)
+GPIO.setup(DIR2_Back, GPIO.OUT)
+GPIO.setup(PWM2_Back, GPIO.OUT)
 
-for pin in [DIR1_Front, PWM1_Front, DIR2_Front, PWM2_Front, DIR1_Back, PWM1_Back, DIR2_Back, PWM2_Back]:
-    setup_gpio(pin, "out")  # Sæt motorpins som output
+# Opret PWM objekter til hastighedskontrol (100 Hz frekvens)
+pwm_front_left = GPIO.PWM(PWM1_Front, 100)  # Venstre forreste motor
+pwm_front_right = GPIO.PWM(PWM2_Front, 100)  # Højre forreste motor
+pwm_back_left = GPIO.PWM(PWM1_Back, 100)  # Venstre bageste motor
+pwm_back_right = GPIO.PWM(PWM2_Back, 100)  # Højre bageste motor
+
+# Start PWM med 0% duty cycle (motorerne er stoppet til at starte med)
+pwm_front_left.start(0)
+pwm_front_right.start(0)
+pwm_back_left.start(0)
+pwm_back_right.start(0)
 
 def move_forward():
-    gpio_write(DIR1_Front, 1)
-    gpio_write(DIR2_Front, 1)
-    gpio_write(DIR1_Back, 1)
-    gpio_write(DIR2_Back, 1)
+    # Sæt alle motorer til fremad
+    GPIO.output(DIR1_Front, True)
+    GPIO.output(DIR2_Front, True)
+    GPIO.output(DIR1_Back, True)
+    GPIO.output(DIR2_Back, True)
+    
+    # Sæt hastigheden til 50% for både forreste og bageste motorer
+    pwm_front_left.ChangeDutyCycle(50)
+    pwm_front_right.ChangeDutyCycle(50)
+    pwm_back_left.ChangeDutyCycle(50)
+    pwm_back_right.ChangeDutyCycle(50)
 
 def turn_left():
-    gpio_write(DIR1_Front, 1)
-    gpio_write(DIR2_Front, 1)
-    gpio_write(DIR1_Back, 1)
-    gpio_write(DIR2_Back, 1)
+    # Sæt retning til fremad, men drej til venstre (højre motor hurtigere)
+    GPIO.output(DIR1_Front, True)
+    GPIO.output(DIR2_Front, True)
+    GPIO.output(DIR1_Back, True)
+    GPIO.output(DIR2_Back, True)
+    
+    # Juster hastigheden: venstre motorer langsommere, højre hurtigere
+    pwm_front_left.ChangeDutyCycle(25)  # 25% hastighed venstre forreste
+    pwm_front_right.ChangeDutyCycle(50)  # 50% hastighed højre forreste
+    pwm_back_left.ChangeDutyCycle(25)  # 25% hastighed venstre bageste
+    pwm_back_right.ChangeDutyCycle(50)  # 50% hastighed højre bageste
 
 def turn_right():
-    gpio_write(DIR1_Front, 1)
-    gpio_write(DIR2_Front, 1)
-    gpio_write(DIR1_Back, 1)
-    gpio_write(DIR2_Back, 1)
+    # Sæt retning til fremad, men drej til højre (venstre motor hurtigere)
+    GPIO.output(DIR1_Front, True)
+    GPIO.output(DIR2_Front, True)
+    GPIO.output(DIR1_Back, True)
+    GPIO.output(DIR2_Back, True)
+    
+    # Juster hastigheden: højre motorer langsommere, venstre hurtigere
+    pwm_front_left.ChangeDutyCycle(50)  # 50% hastighed venstre forreste
+    pwm_front_right.ChangeDutyCycle(25)  # 25% hastighed højre forreste
+    pwm_back_left.ChangeDutyCycle(50)  # 50% hastighed venstre bageste
+    pwm_back_right.ChangeDutyCycle(25)  # 25% hastighed højre bageste
 
 def stop_motors():
-    gpio_write(DIR1_Front, 0)
-    gpio_write(DIR2_Front, 0)
-    gpio_write(DIR1_Back, 0)
-    gpio_write(DIR2_Back, 0)
+    # Stop alle motorer ved at sætte PWM duty cycle til 0
+    pwm_front_left.ChangeDutyCycle(0)
+    pwm_front_right.ChangeDutyCycle(0)
+    pwm_back_left.ChangeDutyCycle(0)
+    pwm_back_right.ChangeDutyCycle(0)
 
 try:
     while True:
         # Læs sensorernes output
-        left_detected = gpio_read(left_sensor)  # Læs venstre sensor
-        right_detected = gpio_read(right_sensor)  # Læs højre sensor
+        left_detected = GPIO.input(left_sensor)  # Læs venstre sensor
+        right_detected = GPIO.input(right_sensor)  # Læs højre sensor
         
         if left_detected == 0 and right_detected == 0:  # Begge sensorer på mørk baggrund
             move_forward()  # Kør ligeud
@@ -85,6 +113,4 @@ try:
 
 except KeyboardInterrupt:
     stop_motors()  # Stop motorerne ved afbrydelse
-    for pin in [left_sensor, right_sensor, DIR1_Front, PWM1_Front, DIR2_Front, PWM2_Front, DIR1_Back, PWM1_Back, DIR2_Back, PWM2_Back]:
-        with open("/sys/class/gpio/unexport", "w") as f:
-            f.write(str(pin))
+    GPIO.cleanup()  # Ryd op i GPIO-indstillingerne

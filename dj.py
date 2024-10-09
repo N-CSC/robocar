@@ -1,36 +1,63 @@
 import RPi.GPIO as GPIO
 import time
 
-# Definer pins
-DIR1 = 20  # Retning for motor 1
-PWM1 = 21  # Hastighed for motor 1
-DIR2 = 19  # Retning for motor 2
-PWM2 = 26  # Hastighed for motor 2
+# Indstil GPIO pins for sensor inputs
+left_sensor = 17  # Venstre sensor til GPIO17
+right_sensor = 27  # Højre sensor til GPIO27
 
-# Sæt op GPIO
+# Indstil GPIO til motor styring
+motor_left_forward = 22
+motor_left_backward = 23
+motor_right_forward = 24
+motor_right_backward = 25
+
+# Opsæt GPIO
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(DIR1, GPIO.OUT)
-GPIO.setup(PWM1, GPIO.OUT)
-GPIO.setup(DIR2, GPIO.OUT)
-GPIO.setup(PWM2, GPIO.OUT)
+GPIO.setup(left_sensor, GPIO.IN)
+GPIO.setup(right_sensor, GPIO.IN)
+GPIO.setup(motor_left_forward, GPIO.OUT)
+GPIO.setup(motor_left_backward, GPIO.OUT)
+GPIO.setup(motor_right_forward, GPIO.OUT)
+GPIO.setup(motor_right_backward, GPIO.OUT)
 
-# Start PWM
-pwm1 = GPIO.PWM(PWM1, 100)  # 100 Hz
-pwm2 = GPIO.PWM(PWM2, 100)  # 100 Hz
-pwm1.start(0)
-pwm2.start(0)
+def move_forward():
+    GPIO.output(motor_left_forward, True)
+    GPIO.output(motor_left_backward, False)
+    GPIO.output(motor_right_forward, True)
+    GPIO.output(motor_right_backward, False)
 
-# Test motor 1
-GPIO.output(DIR1, GPIO.HIGH)  # Sæt retning
-pwm1.ChangeDutyCycle(100)  # 100% hastighed
-time.sleep(5)  # Kør i 5 sekunder
-pwm1.ChangeDutyCycle(0)  # Stop motor
+def turn_left():
+    GPIO.output(motor_left_forward, False)
+    GPIO.output(motor_left_backward, True)
+    GPIO.output(motor_right_forward, True)
+    GPIO.output(motor_right_backward, False)
 
-# Test motor 2
-#GPIO.output(DIR2, GPIO.HIGH)  # Sæt retning
-#pwm2.ChangeDutyCycle(100)  # 100% hastighed
-#time.sleep(5)  # Kør i 5 sekunder
-#pwm2.ChangeDutyCycle(0)  # Stop motor
+def turn_right():
+    GPIO.output(motor_left_forward, True)
+    GPIO.output(motor_left_backward, False)
+    GPIO.output(motor_right_forward, False)
+    GPIO.output(motor_right_backward, True)
 
-# Ryd GPIO
-GPIO.cleanup()
+def stop():
+    GPIO.output(motor_left_forward, False)
+    GPIO.output(motor_left_backward, False)
+    GPIO.output(motor_right_forward, False)
+    GPIO.output(motor_right_backward, False)
+
+try:
+    while True:
+        left = GPIO.input(left_sensor)
+        right = GPIO.input(right_sensor)
+        
+        if left == 1 and right == 1:
+            move_forward()
+        elif left == 0 and right == 1:
+            turn_left()
+        elif left == 1 and right == 0:
+            turn_right()
+        else:
+            stop()
+        time.sleep(0.1)
+
+except KeyboardInterrupt:
+    GPIO.cleanup()

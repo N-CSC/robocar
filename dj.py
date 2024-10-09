@@ -72,7 +72,7 @@ def set_speed(left_speed, right_speed):
 try:
     while True:
         move_forward()
-        set_speed(200, 200)  # Kør fremad med 75% hastighed
+        set_speed(150, 150)  # Kør fremad med 75% hastighed
         time.sleep(1000)
         
         move_backward()

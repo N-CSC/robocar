@@ -3,10 +3,10 @@ import time
 
 # Definer GPIO pins for TB6612 H-broer (forreste hjul)
 DIR1_Front = 17  # Retningskontrol forreste venstre motor
-PWM1_Front = 32  # Hastighedskontrol forreste venstre motor
+PWM1_Front = 12  # Hastighedskontrol forreste venstre motor
 
 DIR2_Front = 27  # Retningskontrol forreste højre motor
-PWM2_Front = 33  # Hastighedskontrol forreste højre motor
+PWM2_Front = 13  # Hastighedskontrol forreste højre motor
 
 # Definer GPIO pins for TB6612 H-broer (bageste hjul)
 DIR1_Back = 5  # Retningskontrol bageste venstre motor

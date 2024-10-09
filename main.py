@@ -1,6 +1,5 @@
 import time
 import os
-import subprocess
 
 # Definer GPIO pins for linjesensorerne
 left_sensor = 20  # GPIO til venstre TCRT5000 sensor
@@ -19,12 +18,12 @@ DIR2_Back = 6  # Retningskontrol for højre bageste motor
 PWM2_Back = 19  # Hastighedskontrol for højre bageste motor
 
 # Funktion til at eksportere og indstille GPIO
-def setup_gpio(pin):
-    # Eksportér pin og sæt den som output
+def setup_gpio(pin, direction):
+    # Eksportér pin og sæt den som output eller input
     with open("/sys/class/gpio/export", "w") as f:
         f.write(str(pin))
     with open(f"/sys/class/gpio/gpio{pin}/direction", "w") as f:
-        f.write("out")
+        f.write(direction)
 
 # Funktion til at skrive værdi til en GPIO pin
 def gpio_write(pin, value):
@@ -37,8 +36,11 @@ def gpio_read(pin):
         return int(f.read().strip())
 
 # Initialiser GPIO pins
-for pin in [left_sensor, right_sensor, DIR1_Front, PWM1_Front, DIR2_Front, PWM2_Front, DIR1_Back, PWM1_Back, DIR2_Back, PWM2_Back]:
-    setup_gpio(pin)
+setup_gpio(left_sensor, "in")  # Venstre sensor som input
+setup_gpio(right_sensor, "in")  # Højre sensor som input
+
+for pin in [DIR1_Front, PWM1_Front, DIR2_Front, PWM2_Front, DIR1_Back, PWM1_Back, DIR2_Back, PWM2_Back]:
+    setup_gpio(pin, "out")  # Sæt motorpins som output
 
 def move_forward():
     gpio_write(DIR1_Front, 1)

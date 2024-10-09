@@ -16,7 +16,7 @@ DIR2_Back = 6  # Retningskontrol bageste højre motor
 PWM2_Back = 19  # Hastighedskontrol bageste højre motor
 
 # Opsæt GPIO pins
-GPIO.setmode(GPIO.RPi)
+GPIO.setmode(GPIO.BCM)
 GPIO.setup(DIR1_Front, GPIO.OUT)
 GPIO.setup(PWM1_Front, GPIO.OUT)
 GPIO.setup(DIR2_Front, GPIO.OUT)

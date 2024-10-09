@@ -1,5 +1,6 @@
 import time
 import os
+import subprocess
 
 # Definer GPIO pins for linjesensorerne
 left_sensor = 20  # GPIO til venstre TCRT5000 sensor
@@ -29,6 +30,11 @@ def setup_gpio(pin):
 def gpio_write(pin, value):
     with open(f"/sys/class/gpio/gpio{pin}/value", "w") as f:
         f.write(str(value))
+
+# Funktion til at læse værdi fra en GPIO pin
+def gpio_read(pin):
+    with open(f"/sys/class/gpio/gpio{pin}/value", "r") as f:
+        return int(f.read().strip())
 
 # Initialiser GPIO pins
 for pin in [left_sensor, right_sensor, DIR1_Front, PWM1_Front, DIR2_Front, PWM2_Front, DIR1_Back, PWM1_Back, DIR2_Back, PWM2_Back]:
@@ -61,8 +67,8 @@ def stop_motors():
 try:
     while True:
         # Læs sensorernes output
-        left_detected = int(os.system(f"cat /sys/class/gpio/gpio{left_sensor}/value"))
-        right_detected = int(os.system(f"cat /sys/class/gpio/gpio{right_sensor}/value"))
+        left_detected = gpio_read(left_sensor)  # Læs venstre sensor
+        right_detected = gpio_read(right_sensor)  # Læs højre sensor
         
         if left_detected == 0 and right_detected == 0:  # Begge sensorer på mørk baggrund
             move_forward()  # Kør ligeud

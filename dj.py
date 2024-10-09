@@ -17,6 +17,8 @@ PWM2_Back = 19  # Hastighedskontrol bageste højre motor
 
 # Opsæt GPIO pins
 GPIO.setmode(GPIO.BCM)
+
+
 GPIO.setup(DIR1_Front, GPIO.OUT)
 GPIO.setup(PWM1_Front, GPIO.OUT)
 GPIO.setup(DIR2_Front, GPIO.OUT)
@@ -75,6 +77,12 @@ def set_speed(left_speed, right_speed):
 
 
 move_forward()
+time.sleep(5)
+pwm_front_right.stop()
+pwm_front_left.stop()
+pwm_back_left.stop()
+pwm_back_right.stop()
+GPIO.cleanup()
 '''
 # Testkørsel
 try:

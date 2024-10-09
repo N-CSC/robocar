@@ -46,8 +46,8 @@ def move_forward():
     # Sæt retningen til fremad
     GPIO.output(DIR1_Front, GPIO.LOW)
     GPIO.output(DIR2_Front, GPIO.LOW)
-    GPIO.output(DIR1_Back, GPIO.LOW)
-    GPIO.output(DIR2_Back, GPIO.LOW)
+    GPIO.output(DIR1_Back, GPIO.HIGH)
+    GPIO.output(DIR2_Back, GPIO.HIGH)
     pwm_back_left.ChangeDutyCycle(100)
     pwm_back_right.ChangeDutyCycle(100)
     pwm_front_left.ChangeDutyCycle(100)

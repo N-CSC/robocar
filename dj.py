@@ -73,11 +73,11 @@ try:
     while True:
         move_forward()
         set_speed(100, 100)  # Kør fremad med 75% hastighed
-        time.sleep(2)
+        time.sleep(1000)
         
         move_backward()
         set_speed(50, 50)  # Kør baglæns med 50% hastighed
-        time.sleep(2)
+        time.sleep(1000)
 
 except KeyboardInterrupt:
     pwm_front_left.stop()

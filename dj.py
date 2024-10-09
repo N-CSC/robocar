@@ -1,78 +1,25 @@
 import RPi.GPIO as GPIO
 import time
 
-# Pin-konfiguration
-left_sensor = 17  # Venstre sensor til GPIO17
-right_sensor = 27  # Højre sensor til GPIO27
+# Definer GPIO pins for linjesensorerne
+left_sensor = 20  # Venstre sensor
+right_sensor = 16  # Højre sensor
 
-# Motor driver pins
-IN1 = 22  # Motor 1 retning
-IN2 = 23  # Motor 1 retning
-IN3 = 24  # Motor 2 retning
-IN4 = 25  # Motor 2 retning
-ENA = 12  # PWM til motor 1 hastighed
-ENB = 13  # PWM til motor 2 hastighed
+# Definer GPIO pins for TB6612 motor driver (forreste hjul)
+IN1_Front_Left = 17  # Forreste venstre motor retning
+IN2_Front_Left = 27  # Forreste venstre motor retning
+PWM_Front_Left = 12  # PWM til hastighedskontrol forreste venstre
 
-# Opsæt GPIO
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(left_sensor, GPIO.IN)
-GPIO.setup(right_sensor, GPIO.IN)
+IN3_Front_Right = 22  # Forreste højre motor retning
+IN4_Front_Right = 23  # Forreste højre motor retning
+PWM_Front_Right = 13  # PWM til hastighedskontrol forreste højre
 
-GPIO.setup(IN1, GPIO.OUT)
-GPIO.setup(IN2, GPIO.OUT)
-GPIO.setup(IN3, GPIO.OUT)
-GPIO.setup(IN4, GPIO.OUT)
-GPIO.setup(ENA, GPIO.OUT)
-GPIO.setup(ENB, GPIO.OUT)
+# Definer GPIO pins for TB6612 motor driver (bageste hjul)
+IN1_Back_Left = 5  # Bageste venstre motor retning
+IN2_Back_Left = 6  # Bageste venstre motor retning
+PWM_Back_Left = 18  # PWM til hastighedskontrol bageste venstre
 
-# Opret PWM objekter
-pwm_left = GPIO.PWM(ENA, 100)  # 100Hz PWM signal til venstre motor
-pwm_right = GPIO.PWM(ENB, 100)  # 100Hz PWM signal til højre motor
+IN3_Back_Right = 19  # Bageste højre motor retning
+IN4_Back_Right = 26  # Bageste højre motor retning
+PWM_Back_Right =
 
-# Start PWM ved 50% duty cycle
-pwm_left.start(50)
-pwm_right.start(50)
-
-def move_forward():
-    GPIO.output(IN1, True)
-    GPIO.output(IN2, False)
-    GPIO.output(IN3, True)
-    GPIO.output(IN4, False)
-
-def turn_left():
-    GPIO.output(IN1, False)
-    GPIO.output(IN2, True)
-    GPIO.output(IN3, True)
-    GPIO.output(IN4, False)
-
-def turn_right():
-    GPIO.output(IN1, True)
-    GPIO.output(IN2, False)
-    GPIO.output(IN3, False)
-    GPIO.output(IN4, True)
-
-def stop():
-    GPIO.output(IN1, False)
-    GPIO.output(IN2, False)
-    GPIO.output(IN3, False)
-    GPIO.output(IN4, False)
-
-try:
-    while True:
-        left = GPIO.input(left_sensor)
-        right = GPIO.input(right_sensor)
-        
-        if left == 1 and right == 1:
-            move_forward()
-        elif left == 0 and right == 1:
-            turn_left()
-        elif left == 1 and right == 0:
-            turn_right()
-        else:
-            stop()
-        time.sleep(0.1)
-
-except KeyboardInterrupt:
-    pwm_left.stop()
-    pwm_right.stop()
-    GPIO.cleanup()

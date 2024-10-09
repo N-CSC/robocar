@@ -72,15 +72,12 @@ def set_speed(left_speed, right_speed):
 try:
     while True:
         move_forward()
-        set_speed(75, 75)  # Kør fremad med 75% hastighed
-        time.sleep(2)
+        set_speed(100, 100)  # Kør fremad med 75% hastighed
         
         move_backward()
         set_speed(50, 50)  # Kør baglæns med 50% hastighed
-        time.sleep(2)
 
         stop_motors()  # Stop motorerne
-        time.sleep(1)
 
 except KeyboardInterrupt:
     pwm_front_left.stop()

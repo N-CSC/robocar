@@ -34,18 +34,22 @@ pwm_back_left = GPIO.PWM(PWM1_Back, 100)  # 100Hz til venstre bageste motor
 pwm_back_right = GPIO.PWM(PWM2_Back, 100)  # 100Hz til højre bageste motor
 
 # Start PWM med 50% duty cycle
-pwm_front_left.start(50)
-pwm_front_right.start(50)
-pwm_back_left.start(50)
-pwm_back_right.start(50)
+pwm_front_left.start(0)
+pwm_front_right.start(0)
+pwm_back_left.start(0)
+pwm_back_right.start(0)
 
 # Funktioner til at styre motorerne
 def move_forward():
     # Sæt retningen til fremad
-    GPIO.output(DIR1_Front, True)
-    GPIO.output(DIR2_Front, True)
-    GPIO.output(DIR1_Back, True)
-    GPIO.output(DIR2_Back, True)
+    GPIO.output(DIR1_Front, GPIO.LOW)
+    GPIO.output(DIR2_Front, GPIO.LOW)
+    GPIO.output(DIR1_Back, GPIO.LOW)
+    GPIO.output(DIR2_Back, GPIO.LOW)
+    pwm_back_left.ChangeDutyCycle(100)
+    pwm_back_right.ChangeDutyCycle(100)
+    pwm_front_left.ChangeDutyCycle(100)
+    pwm_front_right.ChangeDutyCycle(100)
 
 def move_backward():
     # Sæt retningen til baglæns
@@ -68,6 +72,10 @@ def set_speed(left_speed, right_speed):
     pwm_back_left.ChangeDutyCycle(left_speed)
     pwm_back_right.ChangeDutyCycle(right_speed)
 
+
+
+move_forward()
+'''
 # Testkørsel
 try:
     while True:
@@ -85,5 +93,5 @@ except KeyboardInterrupt:
     pwm_back_left.stop()
     pwm_back_right.stop()
     GPIO.cleanup()
-
+'''
 

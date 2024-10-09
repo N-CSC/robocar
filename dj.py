@@ -10,10 +10,10 @@ PWM2_Front = 12  # Hastighedskontrol forreste højre motor
 
 # Definer GPIO pins for TB6612 H-broer (bageste hjul)
 DIR1_Back = 3  # Retningskontrol bageste venstre motor
-PWM1_Back = 8  # Hastighedskontrol bageste venstre motor
+PWM1_Back = 24  # Hastighedskontrol bageste venstre motor
 
-DIR2_Back = 16  # Retningskontrol bageste højre motor
-PWM2_Back = 9  # Hastighedskontrol bageste højre motor
+DIR2_Back = 14  # Retningskontrol bageste højre motor
+PWM2_Back = 10  # Hastighedskontrol bageste højre motor
 
 # Opsæt GPIO pins
 GPIO.setmode(GPIO.BCM)

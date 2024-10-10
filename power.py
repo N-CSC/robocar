@@ -77,13 +77,13 @@ try:
             set_individual_speeds(70, 70, 70, 70)  # Sænk hastigheden på alle hjul
         elif left_value == 0 and right_value == 1:
             # Venstre sensor ser hvid -> Stop venstre forhjul og baghjul, højre kører hurtigere
-            set_individual_speeds(20, 40, 20, 40)  # Stop venstre hjul, højre kører fuld kraft
+            set_individual_speeds(0, 45, 0, 45)  # Stop venstre hjul, højre kører fuld kraft
         elif left_value == 1 and right_value == 0:
             # Højre sensor ser hvid -> Stop højre forhjul og baghjul, venstre kører hurtigere
-            set_individual_speeds(40, 20, 40, 20)  # Stop højre hjul, venstre kører fuld kraft
+            set_individual_speeds(45, 0, 45, 0)  # Stop højre hjul, venstre kører fuld kraft
         else:
             # Begge sensorer ser sort -> Kør fremad med fuld kraft
-            set_individual_speeds(70, 70, 70, 70)  # Fuld hastighed på alle hjul
+            set_individual_speeds(60, 60, 60, 60)  # Fuld hastighed på alle hjul
 
         time.sleep(0.1)  # Vent lidt før næste aflæsning
 

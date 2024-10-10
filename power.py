@@ -74,16 +74,16 @@ try:
         # Motorstyring baseret på sensor-input
         if left_value == 0 and right_value == 0:
             # Begge sensorer ser hvidt -> Sænk hastigheden for alle hjul
-            set_individual_speeds(50, 50, 50, 50)  # Sænk hastigheden på alle hjul
+            set_individual_speeds(30, 30, 30, 30)  # Sænk hastigheden på alle hjul
         elif left_value == 0 and right_value == 1:
             # Venstre sensor ser hvid -> Stop venstre forhjul og baghjul
-            set_individual_speeds(0, 100, 0, 100)  # Stop venstre hjul, højre kører fuld kraft
+            set_individual_speeds(0, 60, 0, 60)  # Stop venstre hjul, højre kører fuld kraft
         elif left_value == 1 and right_value == 0:
             # Højre sensor ser hvid -> Stop højre forhjul og baghjul
-            set_individual_speeds(100, 0, 100, 0)  # Stop højre hjul, venstre kører fuld kraft
+            set_individual_speeds(60, 0, 60, 0)  # Stop højre hjul, venstre kører fuld kraft
         else:
             # Begge sensorer ser sort -> Kør fremad med fuld kraft
-            set_individual_speeds(100, 100, 100, 100)  # Fuld hastighed på alle hjul
+            set_individual_speeds(60, 60, 60, 60)  # Fuld hastighed på alle hjul
 
         time.sleep(0.1)  # Vent lidt før næste aflæsning
 

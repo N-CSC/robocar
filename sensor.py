@@ -56,10 +56,11 @@ def move_forward():
     GPIO.output(DIR2_Front, GPIO.HIGH)
     GPIO.output(DIR1_Back, GPIO.LOW)
     GPIO.output(DIR2_Back, GPIO.LOW)
-    pwm_back_left.ChangeDutyCycle(100)
-    pwm_back_right.ChangeDutyCycle(100)
     pwm_front_left.ChangeDutyCycle(100)
     pwm_front_right.ChangeDutyCycle(100)
+    pwm_back_left.ChangeDutyCycle(100)
+    pwm_back_right.ChangeDutyCycle(100)
+    print("Bevægelse: Fremad")
 
 def move_backward():
     # Sæt retningen til baglæns
@@ -67,10 +68,11 @@ def move_backward():
     GPIO.output(DIR2_Front, GPIO.LOW)
     GPIO.output(DIR1_Back, GPIO.HIGH)
     GPIO.output(DIR2_Back, GPIO.HIGH)
-    pwm_back_left.ChangeDutyCycle(100)
-    pwm_back_right.ChangeDutyCycle(100)
     pwm_front_left.ChangeDutyCycle(100)
     pwm_front_right.ChangeDutyCycle(100)
+    pwm_back_left.ChangeDutyCycle(100)
+    pwm_back_right.ChangeDutyCycle(100)
+    print("Bevægelse: Baglæns")
 
 def stop_motors():
     # Stop motorerne
@@ -78,13 +80,31 @@ def stop_motors():
     pwm_front_right.ChangeDutyCycle(0)
     pwm_back_left.ChangeDutyCycle(0)
     pwm_back_right.ChangeDutyCycle(0)
+    print("Motorer stoppet.")
 
-def set_speed(left_speed, right_speed):
-    # Juster hastighed for venstre og højre side
-    pwm_front_left.ChangeDutyCycle(left_speed)
-    pwm_front_right.ChangeDutyCycle(right_speed)
-    pwm_back_left.ChangeDutyCycle(left_speed)
-    pwm_back_right.ChangeDutyCycle(right_speed)
+def turn_left():
+    # Stop højre motor og kør venstre motor for at dreje til venstre
+    GPIO.output(DIR1_Front, GPIO.HIGH)  # venstre motor fremad
+    GPIO.output(DIR2_Front, GPIO.LOW)   # højre motor baglæns
+    GPIO.output(DIR1_Back, GPIO.LOW)    # venstre bageste motor baglæns
+    GPIO.output(DIR2_Back, GPIO.HIGH)   # højre bageste motor fremad
+    pwm_front_left.ChangeDutyCycle(100)
+    pwm_back_left.ChangeDutyCycle(100)
+    pwm_front_right.ChangeDutyCycle(0)  # stop højre motor
+    pwm_back_right.ChangeDutyCycle(0)    # stop højre bageste motor
+    print("Dreje til venstre")
+
+def turn_right():
+    # Stop venstre motor og kør højre motor for at dreje til højre
+    GPIO.output(DIR1_Front, GPIO.LOW)   # venstre motor baglæns
+    GPIO.output(DIR2_Front, GPIO.HIGH)  # højre motor fremad
+    GPIO.output(DIR1_Back, GPIO.HIGH)   # venstre bageste motor fremad
+    GPIO.output(DIR2_Back, GPIO.LOW)    # højre bageste motor baglæns
+    pwm_front_right.ChangeDutyCycle(100)
+    pwm_back_right.ChangeDutyCycle(100)
+    pwm_front_left.ChangeDutyCycle(0)   # stop venstre motor
+    pwm_back_left.ChangeDutyCycle(0)     # stop venstre bageste motor
+    print("Dreje til højre")
 
 # Hovedprogram til at styre motorer baseret på sensorer
 try:
@@ -102,16 +122,10 @@ try:
             move_forward()
         elif left_value == 0 and right_value == 1:
             # Venstre sensor ser hvid -> Stop venstre hjul og drej til højre
-            pwm_back_left.ChangeDutyCycle(0)
-            pwm_front_left.ChangeDutyCycle(0)
-            pwm_back_right.ChangeDutyCycle(100)
-            pwm_front_right.ChangeDutyCycle(100)
+            turn_right()
         elif left_value == 1 and right_value == 0:
             # Højre sensor ser hvid -> Stop højre hjul og drej til venstre
-            pwm_back_right.ChangeDutyCycle(0)
-            pwm_front_right.ChangeDutyCycle(0)
-            pwm_back_left.ChangeDutyCycle(100)
-            pwm_front_left.ChangeDutyCycle(100)
+            turn_left()
         else:
             # Begge sensorer ser sort -> Stop motorerne
             stop_motors()

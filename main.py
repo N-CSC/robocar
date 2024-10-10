@@ -99,10 +99,10 @@ try:
             move_forward()
         elif left_value == 0 and right_value == 1:
             # Venstre sensor ser sort, højre ser hvid -> drej til venstre
-            set_speed(50, 100)  # Sænk venstre motorhastighed
+            set_speed(100, 50)  # Sænk venstre motorhastighed
         elif left_value == 1 and right_value == 0:
             # Venstre sensor ser hvid, højre ser sort -> drej til højre
-            set_speed(100, 50)  # Sænk højre motorhastighed
+            set_speed(50, 100)  # Sænk højre motorhastighed
         else:
             # Begge sensorer ser sort -> stop motorerne
             stop_motors()

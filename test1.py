@@ -98,14 +98,14 @@ while True:
 
     # If left sensor detects line, turn right and slow down left motor
     if sensor_left_reading == 0:
-        set_speed(20, 100)  # Slow down left motor and turn right
+        set_speed(0, 100)  # Slow down left motor and turn right
     # If right sensor detects line, turn left and slow down right motor
     elif sensor_right_reading == 0:
-        set_speed(100, 20)  # Slow down right motor and turn left
+        set_speed(100, 0)  # Slow down right motor and turn left
     # If both sensors detect line, move forward
     elif sensor_left_reading == 1 and sensor_right_reading == 1:
         move_forward()
-        set_speed(100, 100)  # Move forward with full speed
+        set_speed(50, 50)  # Move forward with full speed
     # If neither sensor detects line, stop
     else:
         stop_motors()

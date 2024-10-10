@@ -35,10 +35,10 @@ GPIO.setup(DIR2_Back, GPIO.OUT)
 GPIO.setup(PWM2_Back, GPIO.OUT)
 
 # Opret PWM objekter til hastighedskontrol (100Hz frekvens)
-pwm_front_left = GPIO.PWM(PWM1_Front, 100)
-pwm_front_right = GPIO.PWM(PWM2_Front, 100)
-pwm_back_left = GPIO.PWM(PWM1_Back, 100)
-pwm_back_right = GPIO.PWM(PWM2_Back, 100)
+pwm_front_left = GPIO.PWM(PWM1_Front, 1000)
+pwm_front_right = GPIO.PWM(PWM2_Front, 1000)
+pwm_back_left = GPIO.PWM(PWM1_Back, 1000)
+pwm_back_right = GPIO.PWM(PWM2_Back, 1000)
 
 # Start PWM med 0% duty cycle
 pwm_front_left.start(0)
@@ -82,13 +82,13 @@ try:
         # Motorstyring baseret på sensor-input
         if left_value == 0 and right_value == 0:
             # Begge sensorer ser hvidt -> Sænk hastigheden for alle hjul
-            set_individual_speeds(70, 70, 70, 70)  # Sænk hastigheden på alle hjul
+            set_individual_speeds(60, 60, 60, 60)  # Sænk hastigheden på alle hjul
         elif left_value == 0 and right_value == 1:
             # Venstre sensor ser hvid -> Stop venstre forhjul og baghjul, højre kører hurtigere
-            set_individual_speeds(0, 70, 0, 70)  # Stop venstre hjul, højre kører fuld kraft
+            set_individual_speeds(0, 80, 0, 80)  # Stop venstre hjul, højre kører fuld kraft
         elif left_value == 1 and right_value == 0:
             # Højre sensor ser hvid -> Stop højre forhjul og baghjul, venstre kører hurtigere
-            set_individual_speeds(70, 0, 70, 0)  # Stop højre hjul, venstre kører fuld kraft
+            set_individual_speeds(80, 0, 80, 0)  # Stop højre hjul, venstre kører fuld kraft
         else:
             # Begge sensorer ser sort -> Kør fremad med fuld kraft
             set_individual_speeds(60, 60, 60, 60)  # Fuld hastighed på alle hjul

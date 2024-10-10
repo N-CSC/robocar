@@ -82,12 +82,24 @@ while True:
     sensor_left_reading = GPIO.input(SENSOR_LEFT)
     sensor_right_reading = GPIO.input(SENSOR_RIGHT)
 
-    # If left sensor detects line, turn right
+    # Increase sensor sensitivity by using a threshold value
+    threshold = 500  # Adjust this value to increase/decrease sensor sensitivity
+    if sensor_left_reading < threshold:
+        sensor_left_reading = 0
+    else:
+        sensor_left_reading = 1
+
+    if sensor_right_reading < threshold:
+        sensor_right_reading = 0
+    else:
+        sensor_right_reading = 1
+
+    # If left sensor detects line, turn right and stop left motor
     if sensor_left_reading == 0:
-        set_speed(50, 100)  # Turn right by reducing left motor speed
-    # If right sensor detects line, turn left
+        set_speed(0, 100)  # Stop left motor and turn right
+    # If right sensor detects line, turn left and stop right motor
     elif sensor_right_reading == 0:
-        set_speed(100, 50)  # Turn left by reducing right motor speed
+        set_speed(100, 0)  # Stop right motor and turn left
     # If both sensors detect line, move forward
     elif sensor_left_reading == 1 and sensor_right_reading == 1:
         move_forward()

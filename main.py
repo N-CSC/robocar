@@ -84,6 +84,7 @@ def set_speed(left_speed, right_speed):
     pwm_back_right.ChangeDutyCycle(right_speed)
 
 # Hovedprogram til at styre motorer baseret på sensorer
+'''
 try:
     while True:
         # Læs sensorernes værdier
@@ -108,6 +109,7 @@ try:
             stop_motors()
 
         time.sleep(0.1)  # Vent lidt før næste aflæsning
+        
 
 except KeyboardInterrupt:
     # Stop motorer og ryd op når programmet afbrydes
@@ -117,3 +119,38 @@ except KeyboardInterrupt:
     pwm_back_right.stop()
     GPIO.cleanup()
     print("Program stoppet og GPIO ryddet op.")
+    '''
+try:
+    while True:
+        # Læs sensorernes værdier
+        left_value = GPIO.input(left_sensor)  # 0 = ingen refleksion (sort), 1 = refleksion (hvid tape)
+        right_value = GPIO.input(right_sensor)
+
+        # Udskriv sensorværdier til terminalen
+        print(f"Venstre sensor: {left_value}, Højre sensor: {right_value}")
+
+        # Motorstyring baseret på sensor-input
+        if left_value == 1 and right_value == 1:
+            # Begge sensorer ser hvidt -> kør fremad, men sænk begge motorer
+            set_speed(50, 50)  # Sænk begge motorers hastighed
+        elif left_value == 1 and right_value == 0:
+            # Venstre sensor ser hvid -> Sænk venstre motor
+            set_speed(50, 100)  # Sænk venstre motor, højre kører fuld kraft
+        elif left_value == 0 and right_value == 1:
+            # Højre sensor ser hvid -> Sænk højre motor
+            set_speed(100, 50)  # Højre motor sænkes, venstre kører fuld kraft
+        else:
+            # Begge sensorer ser sort -> kør fremad med fuld kraft
+            set_speed(100, 100)  # Fuld hastighed på begge motorer
+
+        time.sleep(0.1)  # Vent lidt før næste aflæsning
+
+except KeyboardInterrupt:
+    # Stop motorer og ryd op når programmet afbrydes
+    pwm_front_left.stop()
+    pwm_front_right.stop()
+    pwm_back_left.stop()
+    pwm_back_right.stop()
+    GPIO.cleanup()
+    print("Program stoppet og GPIO ryddet op.")
+

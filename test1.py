@@ -49,7 +49,7 @@ pwm_back_right.start(0)
 # Debounce-funktion
 def debounce_sensor(sensor_pin):
     stable_value = GPIO.input(sensor_pin)  # Læs den nuværende værdi
-    time.sleep(0.05)  # Vent lidt
+    time.sleep(0.5)  # Vent lidt
     return stable_value == GPIO.input(sensor_pin)  # Kontroller stabilitet
 
 # Funktioner til motorstyring

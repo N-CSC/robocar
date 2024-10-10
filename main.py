@@ -86,21 +86,21 @@ def set_speed(left_speed, right_speed):
 # Hovedprogram til at styre motorer baseret på sensorer
 try:
     while True:
-        # Læs sensorernes værdier
-        left_value = GPIO.input(left_sensor)  # 1 = ingen refleksion (sort), 0 = refleksion (hvid tape)
-        right_value = GPIO.input(right_sensor)
+        # Læs sensorernes værdier og inverter dem
+        left_value = not GPIO.input(left_sensor)  # Inverter værdien: 1 = refleksion, 0 = ingen refleksion
+        right_value = not GPIO.input(right_sensor)
 
         # Udskriv sensorværdier til terminalen
         print(f"Venstre sensor: {left_value}, Højre sensor: {right_value}")
 
         # Motorstyring baseret på sensor-input
-        if left_value == 0 and right_value == 0:
+        if left_value == 1 and right_value == 1:
             # Begge sensorer ser hvidt -> kør fremad, men sænk begge motorer
             set_speed(50, 50)  # Sænk begge motorers hastighed
-        elif left_value == 0 and right_value == 1:
+        elif left_value == 1 and right_value == 0:
             # Venstre sensor ser hvid -> Sænk venstre motor
             set_speed(50, 100)  # Sænk venstre motor, højre kører fuld kraft
-        elif left_value == 1 and right_value == 0:
+        elif left_value == 0 and right_value == 1:
             # Højre sensor ser hvid -> Sænk højre motor
             set_speed(100, 50)  # Højre motor sænkes, venstre kører fuld kraft
         else:

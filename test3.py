@@ -7,9 +7,8 @@ right_sensor = 16  # GPIO pin til højre sensor
 
 # Opsæt GPIO pins som input med pull-down modstand
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(left_sensor, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(right_sensor, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-
+GPIO.setup(left_sensor, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(right_sensor, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 try:
     while True:
@@ -21,7 +20,7 @@ try:
         print(f"Venstre sensor: {left_value}, Højre sensor: {right_value}")
         
         # Vent 100 ms før næste aflæsning
-        time.sleep(1)
+        time.sleep(0.1)
 
 except KeyboardInterrupt:
     # Ryd op når programmet afbrydes med Ctrl+C

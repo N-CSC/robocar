@@ -42,38 +42,38 @@ def set_motor_speed(left_speed, right_speed):
     pwm_motors[3].ChangeDutyCycle(right_speed)  # Højre bageste
 
 def move_forward():
-    # Sæt retningen til fremad og kør motorer
-    GPIO.output(DIR1_Front, GPIO.HIGH)
-    GPIO.output(DIR2_Front, GPIO.HIGH)
-    GPIO.output(DIR1_Back, GPIO.LOW)
-    GPIO.output(DIR2_Back, GPIO.LOW)
+    # Sæt retningen til fremad (ombyttet)
+    GPIO.output(DIR1_Front, GPIO.LOW)   # Venstre motor fremad
+    GPIO.output(DIR2_Front, GPIO.LOW)    # Højre motor fremad
+    GPIO.output(DIR1_Back, GPIO.HIGH)    # Venstre bageste motor baglæns
+    GPIO.output(DIR2_Back, GPIO.HIGH)     # Højre bageste motor baglæns
     set_motor_speed(100, 100)  # 100% hastighed
     print("Bevægelse: Fremad")
 
 def move_backward():
-    # Sæt retningen til baglæns og kør motorer
-    GPIO.output(DIR1_Front, GPIO.LOW)
-    GPIO.output(DIR2_Front, GPIO.LOW)
-    GPIO.output(DIR1_Back, GPIO.HIGH)
-    GPIO.output(DIR2_Back, GPIO.HIGH)
+    # Sæt retningen til baglæns (ombyttet)
+    GPIO.output(DIR1_Front, GPIO.HIGH)   # Venstre motor baglæns
+    GPIO.output(DIR2_Front, GPIO.HIGH)    # Højre motor baglæns
+    GPIO.output(DIR1_Back, GPIO.LOW)      # Venstre bageste motor fremad
+    GPIO.output(DIR2_Back, GPIO.LOW)       # Højre bageste motor fremad
     set_motor_speed(100, 100)  # 100% hastighed
     print("Bevægelse: Baglæns")
 
 def turn_left():
-    # Drej til venstre
-    GPIO.output(DIR1_Front, GPIO.HIGH)
-    GPIO.output(DIR2_Front, GPIO.LOW)
-    GPIO.output(DIR1_Back, GPIO.LOW)
-    GPIO.output(DIR2_Back, GPIO.HIGH)
+    # Drej til venstre (ombyttet)
+    GPIO.output(DIR1_Front, GPIO.LOW)  # Venstre motor fremad
+    GPIO.output(DIR2_Front, GPIO.HIGH)  # Højre motor baglæns
+    GPIO.output(DIR1_Back, GPIO.HIGH)   # Venstre bageste motor baglæns
+    GPIO.output(DIR2_Back, GPIO.LOW)    # Højre bageste motor fremad
     set_motor_speed(100, 0)  # Venstre motor kører, højre motor stopper
     print("Dreje til venstre")
 
 def turn_right():
-    # Drej til højre
-    GPIO.output(DIR1_Front, GPIO.LOW)
-    GPIO.output(DIR2_Front, GPIO.HIGH)
-    GPIO.output(DIR1_Back, GPIO.HIGH)
-    GPIO.output(DIR2_Back, GPIO.LOW)
+    # Drej til højre (ombyttet)
+    GPIO.output(DIR1_Front, GPIO.HIGH)  # Venstre motor baglæns
+    GPIO.output(DIR2_Front, GPIO.LOW)   # Højre motor fremad
+    GPIO.output(DIR1_Back, GPIO.LOW)    # Venstre bageste motor fremad
+    GPIO.output(DIR2_Back, GPIO.HIGH)   # Højre bageste motor baglæns
     set_motor_speed(0, 100)  # Højre motor kører, venstre motor stopper
     print("Dreje til højre")
 

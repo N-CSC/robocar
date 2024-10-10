@@ -48,11 +48,11 @@ pwm_back_right.start(0)
 
 # Funktioner til motorstyring
 def set_individual_speeds(front_left_speed, front_right_speed, back_left_speed, back_right_speed):
-    # Juster hastigheder individuelt for hver motor
-    pwm_front_left.ChangeDutyCycle(front_left_speed * 0.8)
-    pwm_front_right.ChangeDutyCycle(front_right_speed * 0.8)
-    pwm_back_left.ChangeDutyCycle(back_left_speed * 0.8)
-    pwm_back_right.ChangeDutyCycle(back_right_speed * 0.8)
+    # Juster hastigheder individuelt for hver motor og reducer med 10%
+    pwm_front_left.ChangeDutyCycle(front_left_speed * 0.7)  # 90% af max hastighed
+    pwm_front_right.ChangeDutyCycle(front_right_speed * 0.7)  # 90% af max hastighed
+    pwm_back_left.ChangeDutyCycle(back_left_speed * 0.7)  # 90% af max hastighed
+    pwm_back_right.ChangeDutyCycle(back_right_speed * 0.7)  # 90% af max hastighed
 
 def stop_motors():
     # Stop alle motorer

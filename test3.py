@@ -1,28 +1,28 @@
 import RPi.GPIO as GPIO
 import time
 
-# Definer GPIO pins for TCRT5000 sensorerne
-left_sensor = 16  # GPIO pin til venstre sensor
-right_sensor = 4  # GPIO pin til højre sensor
+# Define the GPIO pin connected to the TCRT5000 OUT pin
+TCRT_PIN = 4  # Change to the GPIO pin you connected the TCRT5000 to
 
-# Opsæt GPIO pins som input med pull-down modstand
+# Set up GPIO
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(left_sensor, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(right_sensor, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(TCRT_PIN, GPIO.IN)
 
-try:
-    while True:
-        # Læs sensorernes værdier
-        left_value = GPIO.input(left_sensor)  # 0 = ingen refleksion (sort), 1 = refleksion (hvid tape)
-        right_value = GPIO.input(right_sensor)
+# Function to test the sensor
+def test_sensor():
+    try:
+        while True:
+            sensor_value = GPIO.input(TCRT_PIN)  # Read sensor value
+            if sensor_value == 0:
+                print("Object detected!")  # Output LOW when detecting an object (depends on wiring and configuration)
+            else:
+                print("No object detected")  # Output HIGH when no object is present
+            time.sleep(0.5)  # Add a small delay to avoid spamming
 
-        # Udskriv værdierne til terminalen
-        print(f"Venstre sensor: {left_value}, Højre sensor: {right_value}")
-        
-        # Vent 100 ms før næste aflæsning
-        time.sleep(0.1)
+    except KeyboardInterrupt:
+        print("Exiting the test.")
+    finally:
+        GPIO.cleanup()  # Clean up GPIO on exit
 
-except KeyboardInterrupt:
-    # Ryd op når programmet afbrydes med Ctrl+C
-    GPIO.cleanup()
-    print("Program stoppet og GPIO ryddet op.")
+# Run the sensor test
+test_sensor()

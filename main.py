@@ -47,27 +47,12 @@ pwm_back_left.start(0)
 pwm_back_right.start(0)
 
 # Funktioner til motorstyring
-def move_forward():
-    # Sæt retningen til fremad
-    GPIO.output(DIR1_Front, GPIO.HIGH)
-    GPIO.output(DIR2_Front, GPIO.HIGH)
-    GPIO.output(DIR1_Back, GPIO.LOW)
-    GPIO.output(DIR2_Back, GPIO.LOW)
-    pwm_back_left.ChangeDutyCycle(56)   # 80% af 70 er 56
-    pwm_back_right.ChangeDutyCycle(56)  # 80% af 70 er 56
-    pwm_front_left.ChangeDutyCycle(56)  # 80% af 70 er 56
-    pwm_front_right.ChangeDutyCycle(56) # 80% af 70 er 56
-
-def move_backward():
-    # Sæt retningen til baglæns
-    GPIO.output(DIR1_Front, GPIO.LOW)
-    GPIO.output(DIR2_Front, GPIO.LOW)
-    GPIO.output(DIR1_Back, GPIO.LOW)
-    GPIO.output(DIR2_Back, GPIO.LOW)
-    pwm_back_left.ChangeDutyCycle(40)   # 80% af 50 er 40
-    pwm_back_right.ChangeDutyCycle(40)  # 80% af 50 er 40
-    pwm_front_left.ChangeDutyCycle(40)  # 80% af 50 er 40
-    pwm_front_right.ChangeDutyCycle(40) # 80% af 50 er 40
+def set_individual_speeds(front_left_speed, front_right_speed, back_left_speed, back_right_speed):
+    # Juster hastigheder individuelt for hver motor
+    pwm_front_left.ChangeDutyCycle(front_left_speed * 0.8)
+    pwm_front_right.ChangeDutyCycle(front_right_speed * 0.8)
+    pwm_back_left.ChangeDutyCycle(back_left_speed * 0.8)
+    pwm_back_right.ChangeDutyCycle(back_right_speed * 0.8)
 
 def stop_motors():
     # Stop alle motorer
@@ -75,13 +60,6 @@ def stop_motors():
     pwm_front_right.ChangeDutyCycle(0)
     pwm_back_left.ChangeDutyCycle(0)
     pwm_back_right.ChangeDutyCycle(0)
-
-def set_speed(left_speed, right_speed):
-    # Juster hastighed for venstre og højre side med 80% af input
-    pwm_front_left.ChangeDutyCycle(left_speed * 0.8)
-    pwm_front_right.ChangeDutyCycle(right_speed * 0.8)
-    pwm_back_left.ChangeDutyCycle(left_speed * 0.8)
-    pwm_back_right.ChangeDutyCycle(right_speed * 0.8)
 
 # Hovedprogram til at styre motorer baseret på sensorer
 try:
@@ -95,17 +73,17 @@ try:
 
         # Motorstyring baseret på sensor-input
         if left_value == 1 and right_value == 1:
-            # Begge sensorer ser hvidt -> kør fremad, men sænk begge motorer
-            set_speed(50, 50)  # Sænk begge motorers hastighed
+            # Begge sensorer ser hvidt -> Sænk hastigheden for alle hjul
+            set_individual_speeds(50, 50, 50, 50)  # Sænk hastigheden på alle hjul
         elif left_value == 1 and right_value == 0:
-            # Venstre sensor ser hvid -> Sænk venstre motor
-            set_speed(50, 100)  # Sænk venstre motor, højre kører fuld kraft
+            # Venstre sensor ser hvid -> Sænk venstre forhjul og baghjul
+            set_individual_speeds(50, 100, 50, 100)  # Venstre hjul sænkes, højre kører fuld kraft
         elif left_value == 0 and right_value == 1:
-            # Højre sensor ser hvid -> Sænk højre motor
-            set_speed(100, 50)  # Højre motor sænkes, venstre kører fuld kraft
+            # Højre sensor ser hvid -> Sænk højre forhjul og baghjul
+            set_individual_speeds(100, 50, 100, 50)  # Højre hjul sænkes, venstre kører fuld kraft
         else:
-            # Begge sensorer ser sort -> kør fremad med fuld kraft
-            set_speed(100, 100)  # Fuld hastighed på begge motorer
+            # Begge sensorer ser sort -> Kør fremad med fuld kraft
+            set_individual_speeds(100, 100, 100, 100)  # Fuld hastighed på alle hjul
 
         time.sleep(0.1)  # Vent lidt før næste aflæsning
 

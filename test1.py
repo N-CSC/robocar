@@ -105,7 +105,7 @@ while True:
     # If both sensors detect line, move forward
     elif sensor_left_reading == 1 and sensor_right_reading == 1:
         move_forward()
-        set_speed(50, 50)  # Move forward with full speed
+        set_speed(75, 75)  # Move forward with full speed
     # If neither sensor detects line, stop
     else:
         stop_motors()

@@ -82,7 +82,7 @@ def set_speed(left_speed, right_speed):
     pwm_front_right.ChangeDutyCycle(right_speed)
     pwm_back_left.ChangeDutyCycle(left_speed)
     pwm_back_right.ChangeDutyCycle(right_speed)
-
+'''
 # Hovedprogram til at styre motorer baseret på sensorer
 try:
     while True:
@@ -117,3 +117,4 @@ except KeyboardInterrupt:
     pwm_back_right.stop()
     GPIO.cleanup()
     print("Program stoppet og GPIO ryddet op.")
+'''

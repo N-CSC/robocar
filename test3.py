@@ -21,8 +21,8 @@ PWM2_Back = 10    # Hastighedskontrol forreste højre motor
 
 # Opsæt GPIO pins som input for sensorerne og output for motorerne
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(left_sensor, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(right_sensor, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(left_sensor, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # Pulldown-modstand
+GPIO.setup(right_sensor, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # Pulldown-modstand
 
 GPIO.setup(DIR1_Front, GPIO.OUT)
 GPIO.setup(PWM1_Front, GPIO.OUT)
@@ -79,24 +79,24 @@ try:
 
     while True:
         # Læs sensorernes værdier
-        left_value = GPIO.input(left_sensor)  # 0 = ingen refleksion (sort), 1 = refleksion (hvid tape)
+        left_value = GPIO.input(left_sensor)  # 0 = ingen refleksion (hvid tape), 1 = refleksion (sort)
         right_value = GPIO.input(right_sensor)
 
         # Udskriv sensorværdier til terminalen
         print(f"Venstre sensor: {left_value}, Højre sensor: {right_value}")
 
         # Håndter venstre sensor
-        if left_value == 1:
+        if left_value == 1:  # Sensor registrerer refleksion (sort)
             stop_motors()
             left_sensor_timer = time.time()  # Nulstil timeren
-        elif left_value == 0 and time.time() - left_sensor_timer >= 2:
+        elif left_value == 0 and time.time() - left_sensor_timer >= 2:  # Sensor ikke registrerer refleksion
             activate_motors()  # Genaktiver motorer efter 2 sekunder
 
         # Håndter højre sensor
-        if right_value == 1:
+        if right_value == 1:  # Sensor registrerer refleksion (sort)
             stop_motors()
             right_sensor_timer = time.time()  # Nulstil timeren
-        elif right_value == 0 and time.time() - right_sensor_timer >= 2:
+        elif right_value == 0 and time.time() - right_sensor_timer >= 2:  # Sensor ikke registrerer refleksion
             activate_motors()  # Genaktiver motorer efter 2 sekunder
 
         time.sleep(0.1)  # Vent lidt før næste aflæsning

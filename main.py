@@ -53,10 +53,10 @@ def move_forward():
     GPIO.output(DIR2_Front, GPIO.HIGH)
     GPIO.output(DIR1_Back, GPIO.LOW)
     GPIO.output(DIR2_Back, GPIO.LOW)
-    pwm_back_left.ChangeDutyCycle(100)
-    pwm_back_right.ChangeDutyCycle(100)
-    pwm_front_left.ChangeDutyCycle(100)
-    pwm_front_right.ChangeDutyCycle(100)
+    pwm_back_left.ChangeDutyCycle(70)
+    pwm_back_right.ChangeDutyCycle(70)
+    pwm_front_left.ChangeDutyCycle(70)
+    pwm_front_right.ChangeDutyCycle(70)
 
 def move_backward():
     # Sæt retningen til baglæns

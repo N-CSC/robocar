@@ -17,12 +17,12 @@ DIR1_Back = 3    # Retningskontrol bageste venstre motor
 PWM1_Back = 24   # Hastighedskontrol bageste venstre motor
 
 DIR2_Back = 14   # Retningskontrol bageste højre motor
-PWM2_Back = 10    # Hastighedskontrol forreste højre motor
+PWM2_Back = 10    # Hastighedskontrol bageste højre motor
 
 # Opsæt GPIO pins som input for sensorerne og output for motorerne
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(left_sensor, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # Pulldown-modstand
-GPIO.setup(right_sensor, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # Pulldown-modstand
+GPIO.setup(left_sensor, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # Pulldown-modstand
+GPIO.setup(right_sensor, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # Pulldown-modstand
 
 GPIO.setup(DIR1_Front, GPIO.OUT)
 GPIO.setup(PWM1_Front, GPIO.OUT)
@@ -71,9 +71,6 @@ def activate_motors():
 
 # Hovedprogram til at styre motorer baseret på sensorer
 try:
-    left_sensor_last_state = GPIO.input(left_sensor)  # Sidste tilstand for venstre sensor
-    right_sensor_last_state = GPIO.input(right_sensor)  # Sidste tilstand for højre sensor
-
     left_sensor_timer = 0  # Tæller for venstre sensor
     right_sensor_timer = 0  # Tæller for højre sensor
 
@@ -86,17 +83,17 @@ try:
         print(f"Venstre sensor: {left_value}, Højre sensor: {right_value}")
 
         # Håndter venstre sensor
-        if left_value == 1:  # Sensor registrerer refleksion (sort)
-            stop_motors()
+        if left_value == 0:  # Sensor registrerer refleksion (hvidt)
+            stop_motors()  # Stop motorerne
             left_sensor_timer = time.time()  # Nulstil timeren
-        elif left_value == 0 and time.time() - left_sensor_timer >= 2:  # Sensor ikke registrerer refleksion
+        elif left_value == 1 and time.time() - left_sensor_timer >= 2:  # Sensor ikke registrerer refleksion
             activate_motors()  # Genaktiver motorer efter 2 sekunder
 
         # Håndter højre sensor
-        if right_value == 1:  # Sensor registrerer refleksion (sort)
-            stop_motors()
+        if right_value == 0:  # Sensor registrerer refleksion (hvidt)
+            stop_motors()  # Stop motorerne
             right_sensor_timer = time.time()  # Nulstil timeren
-        elif right_value == 0 and time.time() - right_sensor_timer >= 2:  # Sensor ikke registrerer refleksion
+        elif right_value == 1 and time.time() - right_sensor_timer >= 2:  # Sensor ikke registrerer refleksion
             activate_motors()  # Genaktiver motorer efter 2 sekunder
 
         time.sleep(0.1)  # Vent lidt før næste aflæsning

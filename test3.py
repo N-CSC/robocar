@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 import time
 
 # Define the GPIO pin connected to the TCRT5000 OUT pin
-TCRT_PIN = 4  # Change to the GPIO pin you connected the TCRT5000 to
+TCRT_PIN = 16  # Change to the GPIO pin you connected the TCRT5000 to
 
 # Set up GPIO
 GPIO.setmode(GPIO.BCM)

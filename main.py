@@ -41,15 +41,19 @@ pwm_back_right.start(50)
 
 # Function to move the vehicle forward
 def move_forward():
-    # Set direction to forward
-    GPIO.output(DIR1_Front, True)
-    GPIO.output(DIR2_Front, True)
-    GPIO.output(DIR1_Back, True)
-    GPIO.output(DIR2_Back, True)
+    # Sæt retningen til fremad
+    GPIO.output(DIR1_Front, GPIO.HIGH)
+    GPIO.output(DIR2_Front, GPIO.HIGH)
+    GPIO.output(DIR1_Back, GPIO.LOW)
+    GPIO.output(DIR2_Back, GPIO.LOW)
+    pwm_back_left.ChangeDutyCycle(100)
+    pwm_back_right.ChangeDutyCycle(100)
+    pwm_front_left.ChangeDutyCycle(100)
+    pwm_front_right.ChangeDutyCycle(100)
 
 # Function to move the vehicle backward
 def move_backward():
-    # Set direction to backward
+    # Sæt retningen til baglæns
     GPIO.output(DIR1_Front, False)
     GPIO.output(DIR2_Front, False)
     GPIO.output(DIR1_Back, False)

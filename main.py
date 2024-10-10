@@ -1,19 +1,19 @@
 import RPi.GPIO as GPIO
 import time
 
-# Define GPIO pins for TB6612 H-Bridge (front wheels)
-DIR1_Front = 17  # Direction control for front left motor
-PWM1_Front = 12  # Speed control for front left motor
+# Definer GPIO pins for TB6612 H-broer (forreste hjul)
+DIR1_Front = 22  # Retningskontrol forreste venstre motor
+PWM1_Front = 6  # Hastighedskontrol forreste venstre motor
 
-DIR2_Front = 27  # Direction control for front right motor
-PWM2_Front = 13  # Speed control for front right motor
+DIR2_Front = 0  # Retningskontrol forreste højre motor
+PWM2_Front = 12  # Hastighedskontrol forreste højre motor
 
-# Define GPIO pins for TB6612 H-Bridge (back wheels)
-DIR1_Back = 5   # Direction control for back left motor
-PWM1_Back = 18  # Speed control for back left motor
+# Definer GPIO pins for TB6612 H-broer (bageste hjul)
+DIR1_Back = 3  # Retningskontrol bageste venstre motor
+PWM1_Back = 24  # Hastighedskontrol bageste venstre motor
 
-DIR2_Back = 6   # Direction control for back right motor
-PWM2_Back = 19  # Speed control for back right motor
+DIR2_Back = 14  # Retningskontrol bageste højre motor
+PWM2_Back = 10  # Hastighedskontrol bageste højre motor
 
 # Set up GPIO pins
 GPIO.setmode(GPIO.BCM)

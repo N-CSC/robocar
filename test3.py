@@ -20,7 +20,7 @@ try:
         print(f"Venstre sensor: {left_value}, Højre sensor: {right_value}")
         
         # Vent 100 ms før næste aflæsning
-        time.sleep(0.1)
+        time.sleep(1)
 
 except KeyboardInterrupt:
     # Ryd op når programmet afbrydes med Ctrl+C

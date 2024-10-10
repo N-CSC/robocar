@@ -35,10 +35,10 @@ GPIO.setup(DIR2_Back, GPIO.OUT)
 GPIO.setup(PWM2_Back, GPIO.OUT)
 
 # Opret PWM objekter til hastighedskontrol (100Hz frekvens)
-pwm_front_left = GPIO.PWM(PWM1_Front, 1000)
-pwm_front_right = GPIO.PWM(PWM2_Front, 1000)
-pwm_back_left = GPIO.PWM(PWM1_Back, 1000)
-pwm_back_right = GPIO.PWM(PWM2_Back, 1000)
+pwm_front_left = GPIO.PWM(PWM1_Front, 100)
+pwm_front_right = GPIO.PWM(PWM2_Front, 100)
+pwm_back_left = GPIO.PWM(PWM1_Back, 100)
+pwm_back_right = GPIO.PWM(PWM2_Back, 100)
 
 # Start PWM med 0% duty cycle
 pwm_front_left.start(0)

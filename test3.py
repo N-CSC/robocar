@@ -2,8 +2,8 @@ import RPi.GPIO as GPIO
 import time
 
 # Definer GPIO pins for TCRT5000 sensorerne
-left_sensor = 4  # GPIO pin til venstre sensor
-right_sensor = 16  # GPIO pin til højre sensor
+left_sensor = 16  # GPIO pin til venstre sensor
+right_sensor = 4  # GPIO pin til højre sensor
 
 # Opsæt GPIO pins som input med pull-down modstand
 GPIO.setmode(GPIO.BCM)

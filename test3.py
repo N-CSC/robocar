@@ -21,8 +21,8 @@ PWM2_Back = 10    # Hastighedskontrol bageste højre motor
 
 # Opsæt GPIO pins som input for sensorerne og output for motorerne
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(left_sensor, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # Pulldown-modstand
-GPIO.setup(right_sensor, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # Pulldown-modstand
+GPIO.setup(left_sensor, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # Pulldown-modstand
+GPIO.setup(right_sensor, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # Pulldown-modstand
 
 GPIO.setup(DIR1_Front, GPIO.OUT)
 GPIO.setup(PWM1_Front, GPIO.OUT)
@@ -65,15 +65,8 @@ def stop_motors():
     pwm_back_left.ChangeDutyCycle(0)
     pwm_back_right.ChangeDutyCycle(0)
 
-def activate_motors():
-    # Genaktiver motorer med standard hastighed
-    move_forward()
-
 # Hovedprogram til at styre motorer baseret på sensorer
 try:
-    left_sensor_timer = 0  # Tæller for venstre sensor
-    right_sensor_timer = 0  # Tæller for højre sensor
-
     while True:
         # Læs sensorernes værdier
         left_value = GPIO.input(left_sensor)  # 0 = ingen refleksion (hvid tape), 1 = refleksion (sort)
@@ -85,16 +78,14 @@ try:
         # Håndter venstre sensor
         if left_value == 0:  # Sensor registrerer refleksion (hvidt)
             stop_motors()  # Stop motorerne
-            left_sensor_timer = time.time()  # Nulstil timeren
-        elif left_value == 1 and time.time() - left_sensor_timer >= 2:  # Sensor ikke registrerer refleksion
-            activate_motors()  # Genaktiver motorer efter 2 sekunder
+        elif left_value == 1:  # Sensor ikke registrerer refleksion (sort)
+            move_forward()  # Genaktiver motorer
 
         # Håndter højre sensor
         if right_value == 0:  # Sensor registrerer refleksion (hvidt)
             stop_motors()  # Stop motorerne
-            right_sensor_timer = time.time()  # Nulstil timeren
-        elif right_value == 1 and time.time() - right_sensor_timer >= 2:  # Sensor ikke registrerer refleksion
-            activate_motors()  # Genaktiver motorer efter 2 sekunder
+        elif right_value == 1:  # Sensor ikke registrerer refleksion (sort)
+            move_forward()  # Genaktiver motorer
 
         time.sleep(0.1)  # Vent lidt før næste aflæsning
 

@@ -83,7 +83,7 @@ try:
             set_individual_speeds(80, 30, 80, 30)  # Stop højre hjul, venstre kører fuld kraft
         else:
             # Begge sensorer ser sort -> Kør fremad med fuld kraft
-            set_individual_speeds(100, 100, 100, 100)  # Fuld hastighed på alle hjul
+            set_individual_speeds(80, 80, 80, 80)  # Fuld hastighed på alle hjul
 
         time.sleep(0.1)  # Vent lidt før næste aflæsning
 

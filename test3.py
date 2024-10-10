@@ -7,8 +7,9 @@ right_sensor = 16  # GPIO pin til højre sensor
 
 # Opsæt GPIO pins som input med pull-down modstand
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(left_sensor, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(right_sensor, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(left_sensor, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(right_sensor, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
 
 try:
     while True:

@@ -1,19 +1,19 @@
 import RPi.GPIO as GPIO
 import time
 
-# Define GPIO pins for TB6612 H-Bridge (front wheels)
-DIR1_Front = 17  # Direction control for front left motor
-PWM1_Front = 12  # Speed control for front left motor
+# Definer GPIO pins for TB6612 H-broer (forreste hjul)
+DIR1_Front = 22  # Retningskontrol forreste venstre motor
+PWM1_Front = 6  # Hastighedskontrol forreste venstre motor
 
-DIR2_Front = 27  # Direction control for front right motor
-PWM2_Front = 13  # Speed control for front right motor
+DIR2_Front = 0  # Retningskontrol forreste højre motor
+PWM2_Front = 12  # Hastighedskontrol forreste højre motor
 
-# Define GPIO pins for TB6612 H-Bridge (back wheels)
-DIR1_Back = 5   # Direction control for back left motor
-PWM1_Back = 18  # Speed control for back left motor
+# Definer GPIO pins for TB6612 H-broer (bageste hjul)
+DIR1_Back = 3  # Retningskontrol bageste venstre motor
+PWM1_Back = 24  # Hastighedskontrol bageste venstre motor
 
-DIR2_Back = 6   # Direction control for back right motor
-PWM2_Back = 19  # Speed control for back right motor
+DIR2_Back = 14  # Retningskontrol bageste højre motor
+PWM2_Back = 10  # Hastighedskontrol bageste højre motor
 
 # Set up GPIO pins
 GPIO.setmode(GPIO.BCM)
@@ -41,15 +41,19 @@ pwm_back_right.start(50)
 
 # Function to move the vehicle forward
 def move_forward():
-    # Set direction to forward
-    GPIO.output(DIR1_Front, True)
-    GPIO.output(DIR2_Front, True)
-    GPIO.output(DIR1_Back, True)
-    GPIO.output(DIR2_Back, True)
+    # Sæt retningen til fremad
+    GPIO.output(DIR1_Front, GPIO.HIGH)
+    GPIO.output(DIR2_Front, GPIO.HIGH)
+    GPIO.output(DIR1_Back, GPIO.LOW)
+    GPIO.output(DIR2_Back, GPIO.LOW)
+    pwm_back_left.ChangeDutyCycle(100)
+    pwm_back_right.ChangeDutyCycle(100)
+    pwm_front_left.ChangeDutyCycle(100)
+    pwm_front_right.ChangeDutyCycle(100)
 
 # Function to move the vehicle backward
 def move_backward():
-    # Set direction to backward
+    # Sæt retningen til baglæns
     GPIO.output(DIR1_Front, False)
     GPIO.output(DIR2_Front, False)
     GPIO.output(DIR1_Back, False)

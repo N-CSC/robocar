@@ -59,11 +59,6 @@ def move_backward():
     set_motor_speed(100, 100)  # 100% hastighed
     print("Bevægelse: Baglæns")
 
-def stop_motors():
-    # Stop motorerne
-    set_motor_speed(0, 0)
-    print("Motorer stoppet.")
-
 def turn_left():
     # Drej til venstre
     GPIO.output(DIR1_Front, GPIO.HIGH)
@@ -99,12 +94,13 @@ try:
         elif left_value == 1 and right_value == 0:
             turn_left()
         else:
-            stop_motors()
+            set_motor_speed(0, 0)  # Stop motorerne direkte
+            print("Motorer stoppet.")
 
         time.sleep(0.1)  # Vent lidt før næste aflæsning
 
 except KeyboardInterrupt:
-    stop_motors()
+    set_motor_speed(0, 0)  # Stop motorerne
     for pwm in pwm_motors:
         pwm.stop()
     GPIO.cleanup()

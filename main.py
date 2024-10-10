@@ -53,10 +53,10 @@ def move_forward():
     GPIO.output(DIR2_Front, GPIO.HIGH)
     GPIO.output(DIR1_Back, GPIO.LOW)
     GPIO.output(DIR2_Back, GPIO.LOW)
-    pwm_back_left.ChangeDutyCycle(70)
-    pwm_back_right.ChangeDutyCycle(70)
-    pwm_front_left.ChangeDutyCycle(70)
-    pwm_front_right.ChangeDutyCycle(70)
+    pwm_back_left.ChangeDutyCycle(56)   # 80% af 70 er 56
+    pwm_back_right.ChangeDutyCycle(56)  # 80% af 70 er 56
+    pwm_front_left.ChangeDutyCycle(56)  # 80% af 70 er 56
+    pwm_front_right.ChangeDutyCycle(56) # 80% af 70 er 56
 
 def move_backward():
     # Sæt retningen til baglæns
@@ -64,10 +64,10 @@ def move_backward():
     GPIO.output(DIR2_Front, GPIO.LOW)
     GPIO.output(DIR1_Back, GPIO.LOW)
     GPIO.output(DIR2_Back, GPIO.LOW)
-    pwm_back_left.ChangeDutyCycle(50)
-    pwm_back_right.ChangeDutyCycle(50)
-    pwm_front_left.ChangeDutyCycle(50)
-    pwm_front_right.ChangeDutyCycle(50)
+    pwm_back_left.ChangeDutyCycle(40)   # 80% af 50 er 40
+    pwm_back_right.ChangeDutyCycle(40)  # 80% af 50 er 40
+    pwm_front_left.ChangeDutyCycle(40)  # 80% af 50 er 40
+    pwm_front_right.ChangeDutyCycle(40) # 80% af 50 er 40
 
 def stop_motors():
     # Stop alle motorer
@@ -77,11 +77,11 @@ def stop_motors():
     pwm_back_right.ChangeDutyCycle(0)
 
 def set_speed(left_speed, right_speed):
-    # Juster hastighed for venstre og højre side
-    pwm_front_left.ChangeDutyCycle(left_speed)
-    pwm_front_right.ChangeDutyCycle(right_speed)
-    pwm_back_left.ChangeDutyCycle(left_speed)
-    pwm_back_right.ChangeDutyCycle(right_speed)
+    # Juster hastighed for venstre og højre side med 80% af input
+    pwm_front_left.ChangeDutyCycle(left_speed * 0.8)
+    pwm_front_right.ChangeDutyCycle(right_speed * 0.8)
+    pwm_back_left.ChangeDutyCycle(left_speed * 0.8)
+    pwm_back_right.ChangeDutyCycle(right_speed * 0.8)
 
 # Hovedprogram til at styre motorer baseret på sensorer
 try:

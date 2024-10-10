@@ -85,7 +85,7 @@ try:
             # Begge sensorer ser sort -> Kør fremad med fuld kraft
             set_individual_speeds(60, 60, 60, 60)  # Fuld hastighed på alle hjul
 
-        time.sleep(0.1)  # Vent lidt før næste aflæsning
+        time.sleep(0.001)  # Vent lidt før næste aflæsning
 
 except KeyboardInterrupt:
     # Stop motorer og ryd op når programmet afbrydes

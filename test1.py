@@ -76,6 +76,8 @@ def set_speed(left_speed, right_speed):
     pwm_back_left.ChangeDutyCycle(left_speed)
     pwm_back_right.ChangeDutyCycle(right_speed)
 
+# ...
+
 # Line following logic
 while True:
     # Read sensor data
@@ -94,12 +96,12 @@ while True:
     else:
         sensor_right_reading = 1
 
-    # If left sensor detects line, turn right and stop left motor
+    # If left sensor detects line, turn right and slow down left motor
     if sensor_left_reading == 0:
-        set_speed(0, 100)  # Stop left motor and turn right
-    # If right sensor detects line, turn left and stop right motor
+        set_speed(20, 100)  # Slow down left motor and turn right
+    # If right sensor detects line, turn left and slow down right motor
     elif sensor_right_reading == 0:
-        set_speed(100, 0)  # Stop right motor and turn left
+        set_speed(100, 20)  # Slow down right motor and turn left
     # If both sensors detect line, move forward
     elif sensor_left_reading == 1 and sensor_right_reading == 1:
         move_forward()

@@ -34,11 +34,14 @@ GPIO.setup(PWM1_Back, GPIO.OUT)
 GPIO.setup(DIR2_Back, GPIO.OUT)
 GPIO.setup(PWM2_Back, GPIO.OUT)
 
-# Opret PWM objekter til hastighedskontrol (100Hz frekvens)
-pwm_front_left = GPIO.PWM(PWM1_Front, 100)
-pwm_front_right = GPIO.PWM(PWM2_Front, 100)
-pwm_back_left = GPIO.PWM(PWM1_Back, 100)
-pwm_back_right = GPIO.PWM(PWM2_Back, 100)
+GPIO.setup(SENSOR_LEFT, GPIO.IN)
+GPIO.setup(SENSOR_RIGHT, GPIO.IN)
+
+# Create PWM objects for speed control
+pwm_front_left = GPIO.PWM(PWM1_Front, 100)  # 100Hz for front left motor
+pwm_front_right = GPIO.PWM(PWM2_Front, 100)  # 100Hz for front right motor
+pwm_back_left = GPIO.PWM(PWM1_Back, 100)  # 100Hz for back left motor
+pwm_back_right = GPIO.PWM(PWM2_Back, 100)  # 100Hz for back right motor
 
 # Start PWM med 0% duty cycle
 pwm_front_left.start(0)

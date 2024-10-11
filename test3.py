@@ -93,8 +93,17 @@ def press(key):
 def release(key):
     if key == "w" or key == "s" or key == "a" or key == "d" or key == "space":
         Stop()
-while True:
-    listen_keyboard(on_press=press, on_release=release)
+    
+       
+    while True:
+        try:
+            listen_keyboard(on_press=press, on_release=release)
 
 
-     
+        except KeyboardInterrupt:
+            pwm_front_left.stop()
+            pwm_front_right.stop()
+            pwm_back_left.stop()
+            pwm_back_right.stop()
+            GPIO.cleanup()
+            print("Program stoppet og GPIO ryddet op.")

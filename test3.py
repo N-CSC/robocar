@@ -59,7 +59,7 @@ def GoForward():
     set_individual_speeds(100, 100, 100, 100)  # forward
 
 def GoBackward():
-    set_individual_speeds(-100, -100, -100, -100)  # backward
+    set_individual_speeds(-70, -70, -70, -70)  # backward
 
 def TurnLeft():
     set_individual_speeds(0, 100, 0, 100)  # left

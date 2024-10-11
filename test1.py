@@ -75,13 +75,13 @@ try:
         if left_value == 0 and right_value == 0:
             set_individual_speeds(100, 100, 100, 100)  
         elif left_value == 0 and right_value == 1:
-            set_individual_speeds(0, 80, 0, 80) 
+            set_individual_speeds(0, 100, 0, 100) 
         elif left_value == 1 and right_value == 0:
-            set_individual_speeds(80, 0, 80, 0)  
+            set_individual_speeds(100, 0, 100, 0)  
         else:
             set_individual_speeds(100, 100, 100, 100) 
 
-        time.sleep(0.001)  # adjust the sleep time as needed
+        time.sleep(0.0001)  # adjust the sleep time as needed
 
 except KeyboardInterrupt:
     # Stop motorer og ryd op når programmet afbrydes

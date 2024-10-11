@@ -73,12 +73,16 @@ try:
         while True:
             set_individual_speeds(70,0,0,0)
             time.sleep(1000)
+            print("test1")
             set_individual_speeds(0,70,0,0)
             time.sleep(1000)
+            print("test2")
             set_individual_speeds(0,0,70,0)
             time.sleep(1000)
+            print("test3")
             set_individual_speeds(0,0,0,70)
             time.sleep(1000)
+            print("test4")
         # Motorstyring baseret på sensor-input
         if left_value == 0 and right_value == 0:
             # Begge sensorer ser hvidt -> Sænk hastigheden for alle hjul

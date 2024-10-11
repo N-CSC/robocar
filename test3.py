@@ -56,16 +56,16 @@ def stop_motors():
 
 # Define functions for keyboard events
 def GoForward():
-    set_individual_speeds(60, 60, 60, 60)  # forward
+    set_individual_speeds(100, 100, 100, 100)  # forward
 
 def GoBackward():
-    set_individual_speeds(-60, -60, -60, -60)  # backward
+    set_individual_speeds(-100, -100, -100, -100)  # backward
 
 def TurnLeft():
-    set_individual_speeds(0, 80, 0, 80)  # left
+    set_individual_speeds(0, 100, 0, 100)  # left
 
 def TurnRight():
-    set_individual_speeds(80, 0, 80, 0)  # right
+    set_individual_speeds(100, 0, 100, 0)  # right
 
 def Stop():
     stop_motors()  # stop

@@ -99,15 +99,4 @@ except KeyboardInterrupt:
     print("Program stoppet og GPIO ryddet op.")
 
 
-     set_individual_speeds(70,0,0,0)
-            time.sleep(2)
-            print("test1")
-            set_individual_speeds(0,70,0,0)
-            time.sleep(2)
-            print("test2")
-            set_individual_speeds(0,0,70,0)
-            time.sleep(2)
-            print("test3")
-            set_individual_speeds(0,0,0,70)
-            time.sleep(2)
-            print("test4")
+     

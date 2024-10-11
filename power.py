@@ -71,21 +71,16 @@ try:
         # Udskriv sensorværdier til terminalen
         print(f"Venstre sensor: {left_value}, Højre sensor: {right_value}")
         while True:
-         Motorstyring baseret på sensor-input
-             if left_value == 0 and right_value == 0:
-            # Begge sensorer ser hvidt -> Sænk hastigheden for alle hjul
-            set_individual_speeds(60, 60, 60, 60)  # Sænk hastigheden på alle hjul
-            elif left_value == 0 and right_value == 1:
-            # Venstre sensor ser hvid -> Stop venstre forhjul og baghjul, højre kører hurtigere
-            set_individual_speeds(0, 80, 0, 80)  # Stop venstre hjul, højre kører fuld kraft
+            Motorstyring baseret på sensor-input
+            if left_value == 0 and right_value == 0:
+            set_individual_speeds(60, 60, 60, 60)  
+            elif left_value == 0 and right_value == 1
+            set_individual_speeds(0, 80, 0, 80) 
             elif left_value == 1 and right_value == 0:
-            # Højre sensor ser hvid -> Stop højre forhjul og baghjul, venstre kører hurtigere
-            set_individual_speeds(80, 0, 80, 0)  # Stop højre hjul, venstre kører fuld kraft
+            set_individual_speeds(80, 0, 80, 0)  
             else:
-            # Begge sensorer ser sort -> Kør fremad med fuld kraft
-            set_individual_speeds(60, 60, 60, 60)  # Fuld hastighed på alle hjul
-
-            time.sleep(0.001)  # Vent lidt før næste aflæsning
+            set_individual_speeds(60, 60, 60, 60) 
+            time.sleep(0.001) 
 
 except KeyboardInterrupt:
     # Stop motorer og ryd op når programmet afbrydes

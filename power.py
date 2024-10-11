@@ -63,6 +63,7 @@ def stop_motors():
 
 # Hovedprogram til at styre motorer baseret på sensorer
 try:
+    
     while True:
         # Læs sensorernes værdier
         left_value = GPIO.input(left_sensor)  # 0 = ingen refleksion (hvid), 1 = refleksion (sort)
@@ -70,17 +71,17 @@ try:
 
         # Udskriv sensorværdier til terminalen
         print(f"Venstre sensor: {left_value}, Højre sensor: {right_value}")
-        while True:
-            Motorstyring baseret på sensor-input
-            if left_value == 0 and right_value == 0:
+
+        if left_value == 0 and right_value == 0:
             set_individual_speeds(60, 60, 60, 60)  
-            elif left_value == 0 and right_value == 1
+        elif left_value == 0 and right_value == 1:
             set_individual_speeds(0, 80, 0, 80) 
-            elif left_value == 1 and right_value == 0:
+        elif left_value == 1 and right_value == 0:
             set_individual_speeds(80, 0, 80, 0)  
-            else:
+        else:
             set_individual_speeds(60, 60, 60, 60) 
-            time.sleep(0.001) 
+
+        time.sleep(0.001)  # adjust the sleep time as needed
 
 except KeyboardInterrupt:
     # Stop motorer og ryd op når programmet afbrydes

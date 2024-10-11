@@ -81,7 +81,7 @@ try:
         else:
             set_individual_speeds(100, 100, 100, 100) 
 
-        time.sleep(0.0001) # adjust the sleep time as needed
+        time.sleep(0.00001) # adjust the sleep time as needed
 
 except KeyboardInterrupt:
     # Stop motorer og ryd op når programmet afbrydes

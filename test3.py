@@ -30,8 +30,8 @@ def press(key):
 def release(key):
     if key == "w" or key == "s" or key == "a" or key == "d" or key == "space":
         Stop()
-
-listen_keyboard(on_press=press, on_release=release)
+while True:
+    listen_keyboard(on_press=press, on_release=release)
 
 
      

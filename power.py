@@ -71,13 +71,13 @@ try:
         # Udskriv sensorværdier til terminalen
         print(f"Venstre sensor: {left_value}, Højre sensor: {right_value}")
         while True:
-            set_individual_speeds(70,0,70,0)
+            set_individual_speeds(70,0,0,0)
             time.sleep(1000)
-            set_individual_speeds(0,70,0,70)
+            set_individual_speeds(0,70,0,0)
             time.sleep(1000)
-            set_individual_speeds(70,0,70,0)
+            set_individual_speeds(0,0,70,0)
             time.sleep(1000)
-            set_individual_speeds(0,70,0,70)
+            set_individual_speeds(0,0,0,70)
             time.sleep(1000)
         # Motorstyring baseret på sensor-input
         if left_value == 0 and right_value == 0:

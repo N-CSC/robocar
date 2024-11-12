@@ -12,10 +12,11 @@ matches_found = 0
 time_limit = 60  # Tidsbegrænsning i sekunder
 timer = time_limit
 game_over = False
+time_expired = False
 
 # Opretter kortene
 def setup_game():
-    global cards, flipped_cards, matches_found, timer, game_over
+    global cards, flipped_cards, matches_found, timer, game_over, time_expired
     images = ["1", "2", "3", "4", "5", "6", "7", "8"]  # Erstat med faktiske billednavne
     images *= 2  # Skaber par
     random.shuffle(images)
@@ -24,9 +25,10 @@ def setup_game():
     matches_found = 0
     timer = time_limit
     game_over = False
+    time_expired = False
 
 def on_mouse_down(pos):
-    global flipped_cards, matches_found, game_over
+    global flipped_cards, matches_found, game_over, time_expired
 
     if game_over:
         # Hvis spillet er slut og "Spil igen" knappen er klikket
@@ -65,7 +67,7 @@ def reset_flipped_cards():
 
 def draw():
     screen.clear()
-    if not game_over:
+    if not game_over and not time_expired:
         screen.draw.text(f"Timer: {int(timer)}s", (10, 10), color="black", fontsize=40)
         screen.draw.text(f"Matches found: {matches_found}", (600, 10), color="black", fontsize=40)
 
@@ -78,16 +80,22 @@ def draw():
                 screen.draw.text(card, (x + 35, y + 50), color="black", fontsize=40)
             else:
                 screen.draw.filled_rect(Rect((x, y), (card_width, card_height)), "gray")
+    elif time_expired:
+        screen.draw.text("Time's up! Your memory needs practice!", (WIDTH // 2 - 250, HEIGHT // 2 - 50), color="red", fontsize=40)
+        screen.draw.filled_rect(Rect((300, 350), (200, 50)), "orange")
+        screen.draw.text("Play Again", (340, 360), color="black", fontsize=40)
     else:
         screen.draw.text("Congratulations! You found all pairs!", (WIDTH // 2 - 200, HEIGHT // 2 - 100), color="green", fontsize=50)
         screen.draw.filled_rect(Rect((300, 350), (200, 50)), "orange")
         screen.draw.text("Play Again", (340, 360), color="black", fontsize=40)
 
 def update(dt):
-    global timer, game_over
+    global timer, game_over, time_expired
     if timer > 0 and not game_over:
         timer -= dt
-    elif timer <= 0:
+    elif timer <= 0 and not game_over:
+        timer = 0
+        time_expired = True
         game_over = True  # Stop spillet, hvis tiden løber ud
 
 setup_game()

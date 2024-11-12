@@ -1,0 +1,65 @@
+# Step 1: Define the Car class
+class Car:
+    # Step 2a: Initialize the condition member variable
+    condition = "new"
+    
+    # Step 3a: Define the __init__ method to initialize model, color, and mpg
+    def __init__(self, model, color, mpg):
+        self.model = model
+        self.color = color
+        self.mpg = mpg
+
+    # Step 5a: Define a display_car method to describe the car
+    def display_car(self):
+        return f"This is a {self.color} {self.model} with {self.mpg} MPG."
+
+    # Step 6a: Define drive_car method to update the car's condition
+    def drive_car(self):
+        self.condition = "used"
+
+
+# Step 3b: Create an instance of Car with the specified attributes
+my_car = Car("DeLorean", "silver", 88)
+
+# Step 4a: Print the member variables of my_car
+print(my_car.model)   # Output: DeLorean
+print(my_car.color)   # Output: silver
+print(my_car.mpg)     # Output: 88
+
+# Step 5b: Display the car's details using display_car method
+print(my_car.display_car())
+
+# Step 6b: Print the initial condition of my_car
+print("Initial condition:", my_car.condition)  # Output: new
+
+# Step 6c: Drive the car to change its condition
+my_car.drive_car()
+
+# Step 6d: Print the condition of my_car after driving it
+print("Condition after driving:", my_car.condition)  # Output: used
+
+
+# Step 7a: Define the ElectricCar class that inherits from Car
+class ElectricCar(Car):
+    def __init__(self, model, color, mpg, battery_type):
+        # Initialize model, color, and mpg using the parent class's __init__ method
+        super().__init__(model, color, mpg)
+        # Initialize the battery_type specific to ElectricCar
+        self.battery_type = battery_type
+
+    # Step 8a: Override drive_car method for ElectricCar
+    def drive_car(self):
+        self.condition = "like new"
+
+
+# Step 7b: Create an instance of ElectricCar
+my_car = ElectricCar("Tesla", "red", 120, "molten salt")
+
+# Step 8b: Print the initial condition of my_car
+print("Electric car initial condition:", my_car.condition)  # Output: new
+
+# Step 8c: Drive the electric car to change its condition
+my_car.drive_car()
+
+# Step 8d: Print the condition of my_car after driving it
+print("Electric car condition after driving:", my_car.condition)  # Output: like new

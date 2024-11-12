@@ -1,0 +1,107 @@
+import pgzrun
+import random
+
+WIDTH = 800
+HEIGHT = 600
+grid_size = 4  # 4x4 grid
+card_width = 100
+card_height = 150
+cards = []
+flipped_cards = []
+matches_found = 0
+time_limit = 60  # Tidsbegrænsning i sekunder
+timer = time_limit
+game_over = False
+time_expired = False
+
+# Billednavne
+image_files = ["billede1.png", "billede2.png", "billede3.png", "billede4.png",
+               "billede5.png", "billede6.png", "billede7.png", "billede8.png"]
+
+def setup_game():
+    global cards, flipped_cards, matches_found, timer, game_over, time_expired
+    images = image_files[:]  # Kopier billedlisten
+    images *= 2  # Skaber par
+    random.shuffle(images)
+    cards = [(img, False) for img in images]  # Kort er ikke vendt
+    flipped_cards = []
+    matches_found = 0
+    timer = time_limit
+    game_over = False
+    time_expired = False
+
+def on_mouse_down(pos):
+    global flipped_cards, matches_found, game_over, time_expired
+
+    if game_over:
+        # Hvis spillet er slut og "Spil igen" knappen er klikket
+        if 300 < pos[0] < 500 and 350 < pos[1] < 400:
+            setup_game()  # Start et nyt spil
+        return
+
+    x, y = pos
+
+    # Find det kort, der blev klikket på, baseret på `pos`
+    for index, (card, flipped) in enumerate(cards):
+        card_x = (index % grid_size) * card_width + 50
+        card_y = (index // grid_size) * card_height + 50
+
+        if card_x < x < card_x + card_width and card_y < y < card_y + card_height:
+            if not flipped and len(flipped_cards) < 2:
+                cards[index] = (card, True)
+                flipped_cards.append(index)
+
+    # Tjek for match
+    if len(flipped_cards) == 2:
+        i1, i2 = flipped_cards
+        if cards[i1][0] == cards[i2][0]:
+            matches_found += 1
+            flipped_cards = []
+            if matches_found == len(cards) // 2:
+                game_over = True  # Spillet er slut, hvis alle par er fundet
+        else:
+            clock.schedule_unique(reset_flipped_cards, 1.0)
+
+def reset_flipped_cards():
+    global flipped_cards
+    for i in flipped_cards:
+        cards[i] = (cards[i][0], False)
+    flipped_cards = []
+
+def draw():
+    screen.clear()
+    if not game_over and not time_expired:
+        screen.draw.text(f"Timer: {int(timer)}s", (10, 10), color="black", fontsize=40)
+        screen.draw.text(f"Matches found: {matches_found}", (600, 10), color="black", fontsize=40)
+
+        for index, (card, flipped) in enumerate(cards):
+            x = (index % grid_size) * card_width + 50
+            y = (index // grid_size) * card_height + 50
+
+            if flipped:
+                # Tegn billedet, hvis kortet er vendt
+                image = Actor(card, (x + card_width // 2, y + card_height // 2))
+                image.draw()
+            else:
+                # Tegn bagsiden af kortet, hvis det ikke er vendt
+                screen.draw.filled_rect(Rect((x, y), (card_width, card_height)), "gray")
+    elif time_expired:
+        screen.draw.text("Time's up! Your memory needs practice!", (WIDTH // 2 - 250, HEIGHT // 2 - 50), color="red", fontsize=40)
+        screen.draw.filled_rect(Rect((300, 350), (200, 50)), "orange")
+        screen.draw.text("Play Again", (340, 360), color="black", fontsize=40)
+    else:
+        screen.draw.text("Congratulations! You found all pairs!", (WIDTH // 2 - 200, HEIGHT // 2 - 100), color="green", fontsize=50)
+        screen.draw.filled_rect(Rect((300, 350), (200, 50)), "orange")
+        screen.draw.text("Play Again", (340, 360), color="black", fontsize=40)
+
+def update(dt):
+    global timer, game_over, time_expired
+    if timer > 0 and not game_over:
+        timer -= dt
+    elif timer <= 0 and not game_over:
+        timer = 0
+        time_expired = True
+        game_over = True  # Stop spillet, hvis tiden løber ud
+
+setup_game()
+pgzrun.go()

@@ -13,25 +13,27 @@ time_limit = 60  # Tidsbegrænsning i sekunder
 timer = time_limit
 game_over = False
 time_expired = False
+attempts = 0  # Ny variabel til at tælle forsøg
 
 # Billednavne
 image_files = ["billede1.png", "billede2.png", "billede3.png", "billede4.png",
                "billede5.png", "billede6.png", "billede7.png", "billede8.png"]
 
 def setup_game():
-    global cards, flipped_cards, matches_found, timer, game_over, time_expired
+    global cards, flipped_cards, matches_found, timer, game_over, time_expired, attempts
     images = image_files[:]  # Kopier billedlisten
     images *= 2  # Skaber par
     random.shuffle(images)
     cards = [(img, False) for img in images]  # Kort er ikke vendt
     flipped_cards = []
     matches_found = 0
+    attempts = 0  # Nulstil forsøg
     timer = time_limit
     game_over = False
     time_expired = False
 
 def on_mouse_down(pos):
-    global flipped_cards, matches_found, game_over, time_expired
+    global flipped_cards, matches_found, game_over, time_expired, attempts
 
     if game_over:
         # Hvis spillet er slut og "Spil igen" knappen er klikket
@@ -53,6 +55,7 @@ def on_mouse_down(pos):
 
     # Tjek for match
     if len(flipped_cards) == 2:
+        attempts += 1  # Øg antallet af forsøg, når to kort vendes
         i1, i2 = flipped_cards
         if cards[i1][0] == cards[i2][0]:
             matches_found += 1
@@ -70,9 +73,16 @@ def reset_flipped_cards():
 
 def draw():
     screen.clear()
+
     if not game_over and not time_expired:
-        screen.draw.text(f"Timer: {int(timer)}s", (10, 10), color="black", fontsize=40)
-        screen.draw.text(f"Matches found: {matches_found}", (600, 10), color="black", fontsize=40)
+        # Vis timeren øverst i gul farve
+        screen.draw.text(f"Time Left: {int(timer)}s", (10, 10), color="yellow", fontsize=40)
+
+        # Vis antallet af forsøg i toppen, midt
+        screen.draw.text(f"Attempts: {attempts}", (WIDTH // 2 - 100, 10), color="yellow", fontsize=40)
+
+        # Vis antallet af fundne par
+        screen.draw.text(f"Matches Found: {matches_found}", (600, 10), color="black", fontsize=40)
 
         for index, (card, flipped) in enumerate(cards):
             x = (index % grid_size) * card_width + 50
@@ -86,10 +96,12 @@ def draw():
                 # Tegn bagsiden af kortet, hvis det ikke er vendt
                 screen.draw.filled_rect(Rect((x, y), (card_width, card_height)), "gray")
     elif time_expired:
+        # Når tiden er gået
         screen.draw.text("Time's up! Your memory needs practice!", (WIDTH // 2 - 250, HEIGHT // 2 - 50), color="red", fontsize=40)
         screen.draw.filled_rect(Rect((300, 350), (200, 50)), "orange")
         screen.draw.text("Play Again", (340, 360), color="black", fontsize=40)
     else:
+        # Når spillet er vundet
         screen.draw.text("Congratulations! You found all pairs!", (WIDTH // 2 - 250, HEIGHT // 2 - 50), color="green", fontsize=40)
         screen.draw.filled_rect(Rect((300, 350), (200, 50)), "orange")
         screen.draw.text("Play Again", (340, 360), color="black", fontsize=40)

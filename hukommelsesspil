@@ -70,9 +70,13 @@ def reset_flipped_cards():
 
 def draw():
     screen.clear()
+
     if not game_over and not time_expired:
-        screen.draw.text(f"Timer: {int(timer)}s", (10, 10), color="black", fontsize=40)
-        screen.draw.text(f"Matches found: {matches_found}", (600, 10), color="black", fontsize=40)
+        # Vis timeren øverst i gul farve
+        screen.draw.text(f"Time Left: {int(timer)}s", (10, 10), color="yellow", fontsize=40)
+
+        # Vis antallet af fundne par
+        screen.draw.text(f"Matches Found: {matches_found}", (600, 10), color="black", fontsize=40)
 
         for index, (card, flipped) in enumerate(cards):
             x = (index % grid_size) * card_width + 50
@@ -86,10 +90,12 @@ def draw():
                 # Tegn bagsiden af kortet, hvis det ikke er vendt
                 screen.draw.filled_rect(Rect((x, y), (card_width, card_height)), "gray")
     elif time_expired:
+        # Når tiden er gået
         screen.draw.text("Time's up! Your memory needs practice!", (WIDTH // 2 - 250, HEIGHT // 2 - 50), color="red", fontsize=40)
         screen.draw.filled_rect(Rect((300, 350), (200, 50)), "orange")
         screen.draw.text("Play Again", (340, 360), color="black", fontsize=40)
     else:
+        # Når spillet er vundet
         screen.draw.text("Congratulations! You found all pairs!", (WIDTH // 2 - 250, HEIGHT // 2 - 50), color="green", fontsize=40)
         screen.draw.filled_rect(Rect((300, 350), (200, 50)), "orange")
         screen.draw.text("Play Again", (340, 360), color="black", fontsize=40)

@@ -1,10 +1,10 @@
 import pgzrun
 import random
 
-WIDTH = 800
-HEIGHT = 600
+WIDTH = 700
+HEIGHT = 700
 grid_size = 4  # 4x4 grid
-card_width = 100
+card_width = 150
 card_height = 150
 cards = []
 flipped_cards = []
@@ -90,7 +90,7 @@ def draw():
         screen.draw.filled_rect(Rect((300, 350), (200, 50)), "orange")
         screen.draw.text("Play Again", (340, 360), color="black", fontsize=40)
     else:
-        screen.draw.text("Congratulations! You found all pairs!", (WIDTH // 2 - 200, HEIGHT // 2 - 100), color="green", fontsize=50)
+        screen.draw.text("Congratulations! You found all pairs!", (WIDTH // 2 - 250, HEIGHT // 2 - 50), color="green", fontsize=40)
         screen.draw.filled_rect(Rect((300, 350), (200, 50)), "orange")
         screen.draw.text("Play Again", (340, 360), color="black", fontsize=40)
 

@@ -14,10 +14,13 @@ timer = time_limit
 game_over = False
 time_expired = False
 
-# Opretter kortene
+# Billednavne
+image_files = ["billede1.png", "billede2.png", "billede3.png", "billede4.png",
+               "billede5.png", "billede6.png", "billede7.png", "billede8.png"]
+
 def setup_game():
     global cards, flipped_cards, matches_found, timer, game_over, time_expired
-    images = ["1", "2", "3", "4", "5", "6", "7", "8"]  # Erstat med faktiske billednavne
+    images = image_files[:]  # Kopier billedlisten
     images *= 2  # Skaber par
     random.shuffle(images)
     cards = [(img, False) for img in images]  # Kort er ikke vendt
@@ -76,9 +79,11 @@ def draw():
             y = (index // grid_size) * card_height + 50
 
             if flipped:
-                screen.draw.filled_rect(Rect((x, y), (card_width, card_height)), "lightblue")
-                screen.draw.text(card, (x + 35, y + 50), color="black", fontsize=40)
+                # Tegn billedet, hvis kortet er vendt
+                image = Actor(card, (x + card_width // 2, y + card_height // 2))
+                image.draw()
             else:
+                # Tegn bagsiden af kortet, hvis det ikke er vendt
                 screen.draw.filled_rect(Rect((x, y), (card_width, card_height)), "gray")
     elif time_expired:
         screen.draw.text("Time's up! Your memory needs practice!", (WIDTH // 2 - 250, HEIGHT // 2 - 50), color="red", fontsize=40)

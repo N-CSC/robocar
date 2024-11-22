@@ -1,83 +1,92 @@
-import pgzrun
-import random
+import pgzrun  # Biblioteket til at lave spil i Python
+import random  # Bruges til at blande billederne
 
+# Konfiguration af spilvinduet
 WIDTH = 700
 HEIGHT = 700
-grid_size = 4  # 4x4 grid
-card_width = 150
-card_height = 150
-cards = []
-flipped_cards = []
-matches_found = 0
-time_limit = 60  # Tidsbegrænsning i sekunder
-timer = time_limit
-game_over = False
-time_expired = False
+grid_size = 4  # Grid størrelse: 4x4
+card_width = 150  # Bredden på hvert kort
+card_height = 150  # Højden på hvert kort
 
-# Billednavne
+# Spilvariabler
+cards = []  # Liste over kort (billeder og status)
+flipped_cards = []  # Liste over aktuelt vendte kort
+matches_found = 0  # Antal fundne par
+time_limit = 60  # Tidsbegrænsning i sekunder
+timer = time_limit  # Aktuel resterende tid
+game_over = False  # Indikerer, om spillet er slut
+time_expired = False  # Indikerer, om tiden er løbet ud
+
+# Liste over billedfiler, der bruges til kortene
 image_files = ["billede1.png", "billede2.png", "billede3.png", "billede4.png",
                "billede5.png", "billede6.png", "billede7.png", "billede8.png"]
 
+# Funktion til at starte eller nulstille spillet
 def setup_game():
     global cards, flipped_cards, matches_found, timer, game_over, time_expired
-    images = image_files[:]  # Kopier billedlisten
-    images *= 2  # Skaber par
-    random.shuffle(images)
-    cards = [(img, False) for img in images]  # Kort er ikke vendt
-    flipped_cards = []
-    matches_found = 0
-    timer = time_limit
-    game_over = False
-    time_expired = False
+    images = image_files[:]  # Kopi af billedlisten
+    images *= 2  # Dubler listen for at skabe par
+    random.shuffle(images)  # Bland billederne
+    cards = [(img, False) for img in images]  # Opret kort med status "ikke vendt"
+    flipped_cards = []  # Ingen kort er vendt ved start
+    matches_found = 0  # Nulstil fundne par
+    timer = time_limit  # Nulstil timer
+    game_over = False  # Spillet er ikke slut
+    time_expired = False  # Tiden er ikke løbet ud
 
+# Håndtering af museklik
 def on_mouse_down(pos):
     global flipped_cards, matches_found, game_over, time_expired
 
-    if game_over:
-        # Hvis spillet er slut og "Spil igen" knappen er klikket
+    if game_over:  # Hvis spillet er slut
+        # Tjek om "Play Again" knappen blev klikket
         if 300 < pos[0] < 500 and 350 < pos[1] < 400:
             setup_game()  # Start et nyt spil
         return
 
-    x, y = pos
+    x, y = pos  # Musekoordinater
 
-    # Find det kort, der blev klikket på, baseret på `pos`
+    # Find det klikkede kort baseret på positionen
     for index, (card, flipped) in enumerate(cards):
-        card_x = (index % grid_size) * card_width + 50
-        card_y = (index // grid_size) * card_height + 50
+        card_x = (index % grid_size) * card_width + 50  # X-position
+        card_y = (index // grid_size) * card_height + 50  # Y-position
 
         if card_x < x < card_x + card_width and card_y < y < card_y + card_height:
+            # Hvis kortet ikke allerede er vendt og der er mindre end 2 vendte kort
             if not flipped and len(flipped_cards) < 2:
-                cards[index] = (card, True)
-                flipped_cards.append(index)
+                cards[index] = (card, True)  # Vend kortet
+                flipped_cards.append(index)  # Tilføj kortet til listen
 
-    # Tjek for match
+    # Tjek om to kort er vendt
     if len(flipped_cards) == 2:
         i1, i2 = flipped_cards
-        if cards[i1][0] == cards[i2][0]:
-            matches_found += 1
-            flipped_cards = []
-            if matches_found == len(cards) // 2:
-                game_over = True  # Spillet er slut, hvis alle par er fundet
+        if cards[i1][0] == cards[i2][0]:  # Tjek om de matcher
+            matches_found += 1  # Øg antallet af fundne par
+            flipped_cards = []  # Nulstil listen over vendte kort
+            if matches_found == len(cards) // 2:  # Hvis alle par er fundet
+                game_over = True  # Spillet er slut
         else:
+            # Planlæg en nulstilling af vendte kort efter 1 sekund
             clock.schedule_unique(reset_flipped_cards, 1.0)
 
+# Funktion til at nulstille vendte kort (ingen match)
 def reset_flipped_cards():
     global flipped_cards
     for i in flipped_cards:
-        cards[i] = (cards[i][0], False)
-    flipped_cards = []
+        cards[i] = (cards[i][0], False)  # Vend kortene tilbage
+    flipped_cards = []  # Tøm listen
 
+# Tegner spillet på skærmen
 def draw():
-    screen.clear()
+    screen.clear()  # Ryd skærmen
 
     if not game_over and not time_expired:
-        # Vis timeren øverst i gul farve
+        # Vis timeren øverst
         screen.draw.text(f"Time Left: {int(timer)}s", (10, 10), color="yellow", fontsize=40)
-
-        # Vis antallet af fundne par
+        # Vis antal fundne par
         screen.draw.text(f"Matches Found: {matches_found}", (600, 10), color="black", fontsize=40)
 
+        # Tegn kortene
         for index, (card, flipped) in enumerate(cards):
             x = (index % grid_size) * card_width + 50
             y = (index // grid_size) * card_height + 50
@@ -87,27 +96,27 @@ def draw():
                 image = Actor(card, (x + card_width // 2, y + card_height // 2))
                 image.draw()
             else:
-                # Tegn bagsiden af kortet, hvis det ikke er vendt
+                # Tegn bagsiden af kortet
                 screen.draw.filled_rect(Rect((x, y), (card_width, card_height)), "gray")
-    elif time_expired:
-        # Når tiden er gået
+    elif time_expired:  # Hvis tiden er løbet ud
         screen.draw.text("Time's up! Your memory needs practice!", (WIDTH // 2 - 250, HEIGHT // 2 - 50), color="red", fontsize=40)
-        screen.draw.filled_rect(Rect((300, 350), (200, 50)), "orange")
+        screen.draw.filled_rect(Rect((300, 350), (200, 50)), "orange")  # "Play Again" knap
         screen.draw.text("Play Again", (340, 360), color="black", fontsize=40)
-    else:
-        # Når spillet er vundet
+    else:  # Hvis spillet er vundet
         screen.draw.text("Congratulations! You found all pairs!", (WIDTH // 2 - 250, HEIGHT // 2 - 50), color="green", fontsize=40)
-        screen.draw.filled_rect(Rect((300, 350), (200, 50)), "orange")
+        screen.draw.filled_rect(Rect((300, 350), (200, 50)), "orange")  # "Play Again" knap
         screen.draw.text("Play Again", (340, 360), color="black", fontsize=40)
 
+# Opdater timeren og tjek om tiden er løbet ud
 def update(dt):
     global timer, game_over, time_expired
     if timer > 0 and not game_over:
-        timer -= dt
+        timer -= dt  # Reducer tiden
     elif timer <= 0 and not game_over:
         timer = 0
-        time_expired = True
-        game_over = True  # Stop spillet, hvis tiden løber ud
+        time_expired = True  # Tiden er løbet ud
+        game_over = True  # Stop spillet
 
+# Start spillet
 setup_game()
-pgzrun.go()
+pgzrun.go()  # Start Pygame Zero løkken

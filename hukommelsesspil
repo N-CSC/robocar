@@ -103,7 +103,7 @@ def draw():
         screen.draw.filled_rect(Rect((300, 350), (200, 50)), "orange")  # "Play Again" knap
         screen.draw.text("Play Again", (340, 360), color="black", fontsize=40)
     else:  # Hvis spillet er vundet
-        screen.draw.text("Congratulations! You found all pairs!", (WIDTH // 2 - 250, HEIGHT // 2 - 50), color="green", fontsize=40)
+        screen.draw.text("Nice! You found all pairs!", (WIDTH // 2 - 250, HEIGHT // 2 - 50), color="green", fontsize=40)
         screen.draw.filled_rect(Rect((300, 350), (200, 50)), "orange")  # "Play Again" knap
         screen.draw.text("Play Again", (340, 360), color="black", fontsize=40)
 

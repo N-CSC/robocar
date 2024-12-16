@@ -99,7 +99,7 @@ def draw():
                 # Tegn bagsiden af kortet
                 screen.draw.filled_rect(Rect((x, y), (card_width, card_height)), "gray")
     elif time_expired:  # Hvis tiden er løbet ud
-        screen.draw.text("Time's up! Your memory needs practice!", (WIDTH // 2 - 250, HEIGHT // 2 - 50), color="red", fontsize=40)
+        screen.draw.text("tiden er gået, din hukommelse kræver øvelse", (WIDTH // 2 - 250, HEIGHT // 2 - 50), color="red", fontsize=40)
         screen.draw.filled_rect(Rect((300, 350), (200, 50)), "orange")  # "Play Again" knap
         screen.draw.text("Play Again", (340, 360), color="black", fontsize=40)
     else:  # Hvis spillet er vundet
